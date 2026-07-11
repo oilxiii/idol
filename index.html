@@ -1,0 +1,1874 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>โอตะเทพ ผู้มีสายตาสุดแหลมคม!</title>
+<style>
+
+:root{
+  --bg0:#fff2f8;
+  --bg1:#ffe7f2;
+  --panel:#ffffff;
+  --panel2:#fff0f7;
+  --panel3:#ffe1ef;
+  --text:#5b4363;
+  --muted:#b295b8;
+  --gold:#ffc95c;
+  --gold-dark:#e3972f;
+  --pink:#ff8fc9;
+  --pink-dark:#ff5fa8;
+  --cyan:#7fe3e0;
+  --good:#7fdba8;
+  --good-dark:#3fa870;
+  --bad:#ff96ab;
+  --bad-dark:#e2607c;
+  --mystery:#c6a9ff;
+  --mystery-dark:#9a71e8;
+  --line:#ffcbe6;
+  --line-soft:#ffe1f0;
+  --shadow-ink:#7a5a86;
+  --font-display:"Courier New",ui-monospace,"SF Mono",Menlo,monospace;
+  --font-body:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--bg0);
+  color:var(--text);
+  font-family:var(--font-body);
+  display:flex;justify-content:center;
+  position:relative;
+  overflow-x:hidden;
+}
+/* stage atmosphere: pastel spotlight beams + sparkle dots */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% -5%, rgba(255,201,92,.22), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% -5%, rgba(255,143,201,.22), transparent 60%),
+    radial-gradient(3px 3px at 10% 20%, rgba(255,180,220,.9) 50%, transparent 51%),
+    radial-gradient(3px 3px at 30% 65%, rgba(255,201,92,.8) 50%, transparent 51%),
+    radial-gradient(3px 3px at 70% 15%, rgba(199,169,255,.8) 50%, transparent 51%),
+    radial-gradient(3px 3px at 85% 55%, rgba(255,180,220,.75) 50%, transparent 51%),
+    radial-gradient(3px 3px at 50% 80%, rgba(127,227,224,.7) 50%, transparent 51%),
+    radial-gradient(3px 3px at 92% 30%, rgba(255,201,92,.75) 50%, transparent 51%),
+    linear-gradient(180deg,var(--bg1),var(--bg0) 55%);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;
+  background:repeating-linear-gradient(0deg,#7a5a86 0 1px,transparent 1px 3px);
+  mix-blend-mode:multiply;
+}
+.app{
+  width:min(100%,480px);
+  min-height:100vh;
+  padding:14px 14px calc(18px + env(safe-area-inset-bottom));
+  position:relative;z-index:1;
+}
+.screen{display:none;min-height:calc(100vh - 28px)}
+.screen.active{display:flex;flex-direction:column}
+
+/* ---------- pixel icons ---------- */
+.pxicon{vertical-align:-3px;image-rendering:pixelated;shape-rendering:crispEdges;flex-shrink:0}
+.eyebrow .pxicon{vertical-align:-2px}
+
+/* ---------- pixel-corner utility (signature shape language) ---------- */
+.pc,.panel,.card,.reveal-card,.rankitem,.award,.wait-box,.bot-item{
+  clip-path:polygon(
+    0 8px,8px 8px,8px 0,
+    calc(100% - 8px) 0,calc(100% - 8px) 8px,100% 8px,
+    100% calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) 100%,
+    8px 100%,8px calc(100% - 8px),0 calc(100% - 8px)
+  );
+  border-radius:0;
+}
+.pc-sm,.player-choices button,.header .pill,.kind-tag,.badge,.bot-tag,.mine-banner{
+  clip-path:polygon(
+    0 5px,5px 5px,5px 0,
+    calc(100% - 5px) 0,calc(100% - 5px) 5px,100% 5px,
+    100% calc(100% - 5px),calc(100% - 5px) calc(100% - 5px),calc(100% - 5px) 100%,
+    5px 100%,5px calc(100% - 5px),0 calc(100% - 5px)
+  );
+  border-radius:0;
+}
+
+/* ---------- type ---------- */
+.pixel-heading{
+  font-family:var(--font-display);
+  font-weight:700;letter-spacing:.5px;
+  text-shadow:2px 0 0 var(--shadow-ink),-2px 0 0 var(--shadow-ink),0 2px 0 var(--shadow-ink),0 -2px 0 var(--shadow-ink),3px 3px 0 var(--pink-dark);
+}
+.hero-stage{position:relative;margin-top:10px;padding-top:6px;text-align:center}
+.hero-stage .beam{
+  position:absolute;top:-14px;width:0;height:0;opacity:.5;pointer-events:none;
+  border-style:solid;
+}
+.hero-stage .beam.l{left:6%;border-width:0 46px 210px 6px;border-color:transparent transparent rgba(255,211,92,.16) transparent;transform:rotate(4deg)}
+.hero-stage .beam.r{right:6%;border-width:0 6px 210px 46px;border-color:transparent transparent rgba(255,111,163,.14) transparent;transform:rotate(-4deg)}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:6px;margin:0 auto 6px;
+  font-family:var(--font-display);font-size:11px;letter-spacing:2px;color:var(--gold);
+  animation:blinkSlow 1.6s steps(1) infinite;
+}
+@keyframes blinkSlow{0%,100%{opacity:1}50%{opacity:.35}}
+.logo{
+  position:relative;z-index:1;
+  text-align:center;font-weight:900;line-height:1.08;
+  font-size:clamp(26px,7.6vw,38px);margin-top:2px;
+  font-family:var(--font-display);letter-spacing:1px;
+  text-shadow:3px 0 0 var(--shadow-ink),-3px 0 0 var(--shadow-ink),0 3px 0 var(--shadow-ink),0 -3px 0 var(--shadow-ink),5px 5px 0 var(--pink-dark),8px 8px 14px rgba(180,120,170,.28);
+  color:var(--gold);
+}
+.tagline{text-align:center;color:var(--muted);margin:12px 0 20px;font-size:13.5px}
+.label{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+.small{font-size:12px;color:var(--muted)}
+
+/* ---------- panels & layout ---------- */
+.panel{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:2px solid var(--line);
+  padding:16px 14px;
+  box-shadow:0 8px 0 rgba(180,120,170,.22);
+}
+.stack{display:grid;gap:14px}
+.row{display:flex;gap:10px;align-items:center}
+.space{justify-content:space-between}
+
+/* ---------- buttons & inputs ---------- */
+.btn{
+  border:0;border-radius:9px;padding:14px 16px;
+  font-size:16.5px;font-weight:900;cursor:pointer;width:100%;
+  font-family:var(--font-body);letter-spacing:.3px;
+  background:linear-gradient(180deg,#ffe08a,var(--gold));color:#2a2330;
+  box-shadow:0 5px 0 var(--gold-dark),0 8px 14px rgba(180,120,170,.24);
+  transition:transform .05s;
+}
+.btn.secondary{background:linear-gradient(180deg,#ffffff,var(--panel3));color:var(--text);border:2px solid var(--line);box-shadow:0 5px 0 #e3b8d2}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(180,120,170,.35)}
+.btn:focus-visible,input:focus-visible,.card:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+input{
+  width:100%;padding:12px;border:2px solid var(--line);
+  background:var(--bg1);color:var(--text);font-size:16px;margin-top:8px;
+  border-radius:8px;font-family:var(--font-body);
+}
+input::placeholder{color:#655c85}
+
+.player-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.player-choices button{
+  padding:11px 4px;border:2px solid var(--line);
+  background:var(--panel2);color:var(--text);font-weight:900;cursor:pointer;
+  font-family:var(--font-display);
+}
+.player-choices button.selected{border-color:var(--gold);background:var(--pink-dark);color:#fff}
+
+.bot-list{display:grid;gap:8px}
+.bot-item{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--bg1);border:1px solid var(--line-soft);padding:9px 10px
+}
+.bot-tag{
+  font-size:11px;padding:4px 8px;
+  background:var(--panel3);color:#8a6b93;font-weight:800;white-space:nowrap
+}
+.bot-tag.me-tag{background:var(--gold);color:#2a2330}
+
+/* ---------- rules ---------- */
+.rules .panel h2{margin:0 0 4px;font-family:var(--font-display);color:var(--gold);font-size:19px}
+.rules ul{margin:8px 0 0;padding-left:0;line-height:1.6;list-style:none}
+.rules ul li{position:relative;padding-left:22px;margin-bottom:4px}
+.rules ul li::before{content:"★";position:absolute;left:0;top:0;color:var(--gold);font-size:12px}
+.rules .example{margin-top:12px;background:var(--bg1);border:1px dashed var(--line);padding:11px;font-size:13.5px;color:var(--muted)}
+
+/* ---------- header pills ---------- */
+.header{display:flex;justify-content:space-between;gap:6px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.header .pill{
+  background:var(--panel);border:2px solid var(--line);
+  padding:7px 10px;font-size:12px;font-weight:800;white-space:nowrap;
+  font-family:var(--font-mono);
+}
+
+/* ---------- countdown ---------- */
+.countdown-sub{text-align:center;color:var(--muted);font-size:16px;font-family:var(--font-display);letter-spacing:1px;text-transform:uppercase}
+.countdown{
+  margin:14px auto auto;text-align:center;font-weight:900;font-size:96px;color:var(--gold);
+  font-family:var(--font-display);
+  text-shadow:3px 0 0 var(--shadow-ink),-3px 0 0 var(--shadow-ink),0 3px 0 var(--shadow-ink),0 -3px 0 var(--shadow-ink),6px 6px 0 var(--pink-dark);
+  animation:countPulse 1s steps(2) infinite;
+}
+@keyframes countPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+/* ---------- idol cards ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:3px solid var(--line);
+  padding:10px 9px 9px;cursor:pointer;min-height:186px;
+  display:flex;flex-direction:column;position:relative;
+  box-shadow:0 6px 0 rgba(180,120,170,.22);
+}
+.card.kind-good{border-color:var(--good-dark)}
+.card.kind-bad{border-color:var(--bad-dark)}
+.card.kind-mystery{border-color:var(--mystery-dark)}
+.card.selected{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(255,211,92,.22),0 0 22px rgba(255,211,92,.28),0 6px 0 rgba(180,120,170,.22);
+  transform:translateY(-2px)
+}
+.card.selected:after{
+  content:"คุณเลือก";position:absolute;right:6px;top:6px;background:var(--gold);color:#2a2330;
+  padding:3px 7px;font-size:9.5px;font-weight:900;font-family:var(--font-display);z-index:2;
+}
+.kind-tag{
+  align-self:flex-start;font-size:9.5px;font-weight:900;padding:2px 6px;margin-bottom:6px;
+  font-family:var(--font-display);letter-spacing:.3px;color:#12100d;
+}
+.kind-tag.good{background:var(--good)}
+.kind-tag.bad{background:var(--bad)}
+.kind-tag.mystery{background:var(--mystery)}
+
+.pixel-art,.result-pixel{
+  position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.9),transparent 65%),linear-gradient(180deg,#fff7fc,#ffe6f3);
+  border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+}
+.pixel-art{height:92px;margin-bottom:8px}
+.pixel-art svg,.result-pixel svg{width:88%;height:88%;image-rendering:pixelated;shape-rendering:crispEdges;display:block}
+.spark{
+  position:absolute;top:3px;right:4px;z-index:1;
+  animation:twinkle 1.4s ease-in-out infinite;
+}
+.spark svg{width:11px;height:11px;image-rendering:pixelated;shape-rendering:crispEdges}
+@keyframes twinkle{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+
+.card-title{font-weight:900;font-size:14.5px}
+.base{font-size:18px;color:var(--gold);font-weight:900;font-family:var(--font-mono)}
+.rumor{font-size:11px;color:#6b4f74;line-height:1.3;margin-top:5px}
+.footer-action{margin-top:auto;padding-top:12px}
+.waiting{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+.wait-box{
+  display:none;margin-top:10px;background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:2px solid var(--line);padding:14px;text-align:center
+}
+
+/* ---------- reveal ---------- */
+.phase-title{
+  text-align:center;font-size:17px;font-weight:900;margin:2px 0 10px;
+  font-family:var(--font-display);color:var(--gold);letter-spacing:.5px;
+}
+.reveal-list{display:grid;grid-template-columns:1fr 1fr;gap:7px;overflow:visible}
+.reveal-card{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));border:2px solid var(--line);
+  padding:8px;opacity:0;transform:translateY(12px) scale(.98);
+  transition:.3s ease;position:relative;overflow:visible;min-height:122px;
+}
+.reveal-card.show{opacity:1;transform:none}
+.reveal-card.true{border-color:var(--good-dark)}
+.reveal-card.false{opacity:1;filter:none}
+.reveal-card.show.false{opacity:1}
+.reveal-card.mine{
+  grid-column:1/-1;border:3px solid var(--gold);
+  box-shadow:0 0 0 3px rgba(255,211,92,.16),0 7px 18px rgba(255,211,92,.14);
+}
+.mine-banner{
+  position:absolute;top:6px;right:6px;z-index:6;
+  background:var(--gold);color:#2a2330;
+  padding:4px 8px;font-size:9.5px;font-weight:900;font-family:var(--font-display);
+}
+.reveal-main{display:grid;grid-template-columns:56px minmax(0,1fr);gap:9px;align-items:start}
+.reveal-left{display:flex;flex-direction:column;gap:5px}
+.result-pixel{width:56px;height:78px}
+.reveal-name{text-align:center;font-size:11px;font-weight:900}
+.badge{
+  font-size:9px;padding:3px 5px;background:var(--bg1);color:var(--muted);
+  white-space:nowrap;text-align:center;width:100%;font-family:var(--font-display);
+}
+.reveal-card.true .badge{color:var(--good);border:1px solid var(--good-dark)}
+.reveal-card.false .badge{color:var(--bad);border:1px solid var(--bad-dark)}
+.reveal-body{min-width:0;padding-top:1px}
+.score-head{display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+.score-head .base{font-size:21px;line-height:1;font-family:var(--font-mono)}
+.delta-inline{font-size:19px;font-weight:900;line-height:1;font-family:var(--font-mono)}
+.plus{color:var(--good)} .minus{color:var(--bad)} .zero{color:var(--muted)}
+.picker-icons{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:7px;min-height:18px}
+.person-dot{
+  width:13px;height:13px;
+  background:#e0b8d6;position:relative;opacity:0;
+  transform:translateY(7px) scale(.7);animation:personPop .24s ease forwards;
+}
+.person-dot::after{
+  content:"";position:absolute;left:2px;right:2px;bottom:-5px;height:6px;background:#e0b8d6;
+}
+.person-dot.me,.person-dot.me::after{background:var(--gold)}
+.pick-score-summary{
+  display:inline-flex;align-items:center;margin-left:4px;padding:3px 6px;
+  background:var(--bg1);color:var(--text);font-size:10px;font-weight:900;
+  font-family:var(--font-mono);opacity:0;transform:translateY(6px);
+  animation:personPop .24s ease forwards;white-space:nowrap;
+}
+.pick-score-summary.mine{background:rgba(255,211,92,.16);color:var(--gold);border:1px solid rgba(255,211,92,.55)}
+@keyframes personPop{to{opacity:1;transform:none}}
+.auto-note{text-align:center;color:var(--muted);font-size:11px;margin:8px 0 2px}
+
+/* ---------- standings & final ---------- */
+.rankbox{display:grid;gap:8px;margin-top:12px}
+.rankitem{background:linear-gradient(180deg,var(--panel),var(--panel2));border:2px solid var(--line);padding:13px;font-weight:900}
+.final-title{
+  text-align:center;font-size:26px;margin:14px 0;font-family:var(--font-display);color:var(--gold);
+  text-shadow:2px 0 0 var(--shadow-ink),-2px 0 0 var(--shadow-ink),0 2px 0 var(--shadow-ink),0 -2px 0 var(--shadow-ink),4px 4px 0 var(--pink-dark);
+}
+.final-rank{display:grid;gap:7px}
+.final-rank .rank-row{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--line-soft);padding:10px 12px}
+.final-rank .rank-row.rank-1{border-color:var(--gold);background:linear-gradient(180deg,var(--panel3),var(--panel))}
+.final-rank .rank-row.rank-2{border-color:#c9c2de}
+.final-rank .rank-row.rank-3{border-color:#c98a4e}
+.awards{display:grid;gap:9px;margin-top:12px}
+.award{background:linear-gradient(180deg,var(--panel),var(--panel2));border:2px solid var(--line);padding:12px}
+.award strong{color:var(--gold);font-family:var(--font-display);font-size:13.5px}
+
+@media (max-height:850px){
+  .phase-title{font-size:15px;margin:0 0 6px}
+  .header{margin-bottom:6px}
+  .reveal-card{padding:6px;min-height:120px}
+  .result-pixel{width:48px;height:66px}
+  .reveal-main{grid-template-columns:48px minmax(0,1fr);gap:7px}
+  .countdown{font-size:78px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+}
+
+
+.sharp-eye-bonus{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:7px;
+  padding:5px 8px;
+  background:linear-gradient(135deg,rgba(255,224,138,.42),rgba(255,201,92,.2));
+  border:1px solid var(--gold-dark);
+  color:var(--gold-dark);
+  font-size:10px;
+  font-weight:900;
+  font-family:var(--font-mono);
+  box-shadow:0 0 0 2px rgba(255,201,92,.12),0 4px 10px rgba(227,151,47,.18);
+  opacity:0;
+  transform:scale(.76) translateY(5px);
+  animation:sharpEyePop .48s cubic-bezier(.2,.9,.25,1.25) forwards;
+  white-space:nowrap;
+}
+@keyframes sharpEyePop{
+  0%{opacity:0;transform:scale(.76) translateY(5px)}
+  70%{opacity:1;transform:scale(1.08) translateY(0)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+.reveal-card.sharp-eye{
+  box-shadow:0 0 0 3px rgba(255,201,92,.18),0 7px 18px rgba(227,151,47,.14);
+}
+
+
+/* ---------- fan comment bubble ---------- */
+.fan-comment{
+  margin-top:8px;
+  width:100%;
+  box-sizing:border-box;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#fff;
+  color:#40384a;
+  font-size:10px;
+  line-height:1.35;
+  font-weight:800;
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+  border:2px solid rgba(255,255,255,.95);
+  animation:fanBubble .35s ease forwards;
+}
+.fan-comment::after{
+  display:none;
+}
+@keyframes fanBubble{
+  from{opacity:0;transform:translateY(8px) scale(.9)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+<section id="home" class="screen active">
+  <div class="hero-stage">
+    <span class="beam l"></span><span class="beam r"></span>
+    <div class="eyebrow"><span data-icon="eye" data-icon-main="var(--pink-dark)" data-icon-detail="var(--gold-dark)" data-icon-size="13"></span> PARTY GAME · 3–8 PLAYERS</div>
+    <div class="logo">โอตะเทพ<br>ผู้มีสายตาสุดแหลมคม!</div>
+  </div>
+  <div class="tagline">ใครกันแน่ มองเห็นดาวดวงต่อไปได้ก่อนใคร</div>
+
+  <div class="panel stack">
+    <div>
+      <div class="label">ชื่อผู้เล่น</div>
+      <input id="playerName" maxlength="16" placeholder="ใส่ชื่อของคุณ">
+    </div>
+
+    <div>
+      <div class="label">จำนวนผู้เล่นรวม</div>
+      <div id="playerChoices" class="player-choices"></div>
+    </div>
+
+    <div>
+      <div class="label">ผู้เล่นในห้อง</div>
+      <div id="botList" class="bot-list" style="margin-top:8px"></div>
+    </div>
+
+    <button class="btn" onclick="goRules()">เริ่มตั้งวงถกกัน</button>
+  </div>
+</section>
+
+<section id="rules" class="screen rules">
+  <div class="header">
+    <button class="btn secondary" style="width:auto;padding:8px 11px" onclick="showScreen('home')">กลับ</button>
+    <div class="pill">Pt. ของคุณ <span id="rulesScore">0</span></div>
+  </div>
+
+  <div class="panel">
+    <h2>กติกาแบบรวบรัด</h2>
+    <ul>
+      <li>แต่ละรอบ เลือกไอดอล 1 คน</li>
+      <li>ไอดอลมี Pt. พื้นฐานและข่าวลือ</li>
+      <li>ข่าวลืออาจจริงหรือปลอม</li>
+      <li>ถ้าจริง Pt. อาจเพิ่ม ลด หรือพลิกได้</li>
+      <li>ถ้ามีหลายคนเลือกคนเดียวกัน Pt. จะถูกหารกัน</li>
+      <li>ถ้าเลือกไอดอลคนเดียว จะได้โบนัสตาแหลมคม +2 / +4 / +6 Pt. ตามช่วงเกม</li>
+    </ul>
+    <div class="example">ไอดอล 8 Pt. มีคนเลือก 4 คน → คนละ 2 Pt.<br>ไอดอล 5 Pt. มีคนเลือกคนเดียว → ได้ 5 Pt. เต็ม</div>
+  </div>
+
+  <div class="footer-action"><button class="btn" onclick="startGame()">พร้อมแล้ว เริ่มเกม</button></div>
+</section>
+
+<section id="countdown" class="screen">
+  <div class="header">
+    <div class="pill">รอบ <span id="countRound">1</span> / 10</div>
+    <div class="pill">Pt. ของคุณ <span id="countScore">0</span></div>
+  </div>
+  <div style="margin:auto 0">
+    <div class="countdown-sub">เตรียมเลือกโอชิ</div>
+    <div id="countNum" class="countdown">3</div>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="header">
+    <div class="pill">รอบ <span id="gameRound">1</span> / 10</div>
+    <div class="pill"><span data-icon="clock" data-icon-main="var(--pink-dark)" data-icon-detail="var(--gold-dark)"></span> <span id="turnTimer">60</span>s</div>
+    <div class="pill"><span data-icon="people" data-icon-main="var(--pink-dark)"></span> <span id="readyCount">0</span>/<span id="totalPlayers">5</span></div>
+    <div class="pill">Pt. <span id="gameScore">0</span></div>
+    <button id="musicToggle" class="pill" type="button" onclick="AudioFX.toggleMusic()" style="cursor:pointer;color:var(--text)">BGM ON</button>
+  </div>
+
+  <div id="cards" class="grid"></div>
+
+  <div id="waitingOverlay" class="wait-box">
+    <div style="font-weight:900"><span data-icon="check" data-icon-main="var(--good-dark)"></span> คุณเลือกแล้ว</div>
+    <div id="waitingMessage" class="small" style="margin-top:6px">กำลังรอผู้เล่นคนอื่น...</div>
+  </div>
+
+  <div class="footer-action">
+    <button id="confirmBtn" class="btn" onclick="confirmChoice()">ยืนยันการเลือก</button>
+    <div id="waitingText" class="waiting">เลือกไอดอล 1 คน</div>
+  </div>
+</section>
+
+<section id="reveal" class="screen">
+  <div class="header">
+    <div class="pill">รอบ <span id="revealRound">1</span></div>
+    <div class="pill">Pt. ของคุณ <span id="revealScore">0</span></div>
+  </div>
+
+  <div class="phase-title"><span data-icon="mic" data-icon-main="var(--pink-dark)" data-icon-detail="var(--gold-dark)" data-icon-size="15"></span> สรุปกระแสไอดอล</div>
+  <div id="revealList" class="reveal-list"></div>
+  <div id="revealNote" class="auto-note">กำลังเปิดผลทีละรายการ...</div>
+
+  <div id="resultAction" class="footer-action" style="display:none">
+    <button class="btn" onclick="showStandings()">ดูอันดับปัจจุบัน</button>
+  </div>
+</section>
+
+<section id="standings" class="screen">
+  <div class="header">
+    <div class="pill">จบรอบ <span id="standRound">1</span></div>
+    <div class="pill">Pt. ของคุณ <span id="standScore">0</span></div>
+  </div>
+
+  <div class="phase-title">อันดับปัจจุบัน</div>
+  <div class="rankbox">
+    <div id="leaderBox" class="rankitem">-</div>
+    <div id="lastBox" class="rankitem">-</div>
+  </div>
+
+  <div class="footer-action">
+    <button id="nextBtn" class="btn" onclick="nextRound()">เล่นรอบต่อไป</button>
+  </div>
+</section>
+
+<section id="final" class="screen">
+  <div class="final-title">จบเกม!</div>
+
+  <div class="panel" style="text-align:center">
+    <div class="label">โอตะเทพ ผู้มีสายตาสุดแหลมคม</div>
+    <div id="winnerName" style="font-size:30px;font-weight:900;color:var(--gold-dark);margin-top:6px">-</div>
+  </div>
+
+  <div id="finalRank" class="final-rank" style="margin-top:12px"></div>
+
+  <div class="awards">
+    <div class="award"><strong id="playerTitle">ฉายาของคุณ</strong><div id="playerTitleDesc" class="small" style="margin-top:4px"></div></div>
+    <div class="award"><strong>สถิติของคุณ</strong><div id="playerStats" class="small" style="margin-top:4px"></div></div>
+  </div>
+
+  <div class="footer-action"><button class="btn" onclick="resetGame()">กลับหน้าแรก</button></div>
+</section>
+
+</div>
+
+<script>
+/* ================= 8-BIT PIXEL ICON SYSTEM =================
+   Every icon is a tiny grid: '.' = empty, 'X' = main color, 'O' = detail color.
+   Rendered as crisp <rect> pixels inside an inline SVG. */
+function pixelSVG(rows,{main="currentColor",detail=null,size=14,extraClass=""}={}){
+  const h=rows.length, w=rows[0].length;
+  let rects="";
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const c=rows[y][x];
+      if(c===".") continue;
+      const fill=(c==="O"&&detail)?detail:main;
+      rects+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${fill}"/>`;
+    }
+  }
+  return `<svg class="pxicon ${extraClass}" viewBox="0 0 ${w} ${h}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+}
+
+const PXICONS={
+  eye:[
+    ".XXXXXX.",
+    "XX....XX",
+    "X.OOOO.X",
+    "X.OOOO.X",
+    "XX....XX",
+    ".XXXXXX."],
+  trophy:[
+    ".XXXXXX.",
+    "XOOOOOOX",
+    "XOOOOOOX",
+    ".XOOOOX.",
+    "..XXXX..",
+    "...XX...",
+    "...XX...",
+    "..XXXX..",
+    ".XXXXXX."],
+  raincloud:[
+    "..XXXX..",
+    ".XXXXXX.",
+    "XXXXXXXX",
+    "XXXXXXXX",
+    "........",
+    ".O.O.O..",
+    "..O.O.O."],
+  clock:[
+    "..XXXX..",
+    ".X....X.",
+    "X..O...X",
+    "X..O...X",
+    "X..OOO.X",
+    ".X....X.",
+    "..XXXX.."],
+  people:[
+    ".XX...XX.",
+    ".XX...XX.",
+    "XXXXXXXXX",
+    "XXXXXXXXX",
+    "XX.....XX",
+    "XX.....XX"],
+  mic:[
+    "..XXXX..",
+    ".XXXXXX.",
+    ".XXXXXX.",
+    ".XXXXXX.",
+    ".XXXXXX.",
+    "..XXXX..",
+    ".X....X.",
+    ".X....X.",
+    "..XXXX..",
+    "..XXXX.."],
+  star:[
+    "...XX...",
+    "...XX...",
+    "XX.XX.XX",
+    ".XXXXXX.",
+    "XXXXXXXX",
+    ".XXXXXX.",
+    "XX.XX.XX",
+    "...XX..."],
+  check:[
+    ".......X",
+    "......XX",
+    ".....XX.",
+    "X...XX..",
+    "XX.XX...",
+    ".XXX....",
+    "..X....."],
+  bar_trend:[
+    "........",
+    "......XX",
+    "....XXXX",
+    "....XXXX",
+    "..XXXXXX",
+    "..XXXXXX"],
+  target:[
+    ".XXXXX.",
+    "X.....X",
+    "X.XXX.X",
+    "X.XOX.X",
+    "X.XXX.X",
+    "X.....X",
+    ".XXXXX."],
+  newspaper:[
+    "XXXXXXX",
+    "X.....X",
+    "X.OOO.X",
+    "X.OOO.X",
+    "X.....X",
+    "X.OO..X",
+    "X.....X",
+    "XXXXXXX"],
+  calculator:[
+    "XXXXXXX",
+    "X.....X",
+    "X.OOO.X",
+    "X.....X",
+    "X.O.O.X",
+    "X.....X",
+    "X.O.O.X",
+    "XXXXXXX"],
+  dice:[
+    "XXXXXXX",
+    "X.....X",
+    "X.O.O.X",
+    "X..O..X",
+    "X.O.O.X",
+    "X.....X",
+    "XXXXXXX"],
+  shield:[
+    "XXXXXXX",
+    "X.....X",
+    "X.OOO.X",
+    "X.OOO.X",
+    ".X...X.",
+    ".X...X.",
+    "..XXX..",
+    "...X..."],
+  spiral:[
+    "XXXXX..",
+    "X....X.",
+    "X.XX.X.",
+    "X.X..X.",
+    "X.XXXX.",
+    "X......",
+    ".XXXXX."],
+  medal:[
+    ".XXXXX.",
+    "XXXXXXX",
+    "XXOOOXX",
+    "XXOOOXX",
+    "XXOOOXX",
+    "XXXXXXX",
+    ".XXXXX."],
+  heart:[
+    ".XX.XX.",
+    "XXXXXXX",
+    "XXXXXXX",
+    ".XXXXX.",
+    "..XXX..",
+    "...X..."]
+};
+
+function pxicon(name,opts={}){
+  const rows=PXICONS[name];
+  if(!rows) return "";
+  return pixelSVG(rows,opts);
+}
+
+const botTypeIconName={
+  "สายตามกระแส":"bar_trend","สายสวน":"target","สายข่าว":"newspaper",
+  "สายคำนวณ":"calculator","สายสุ่ม":"dice","สายเซฟ":"shield","สายเสี่ยง":"spiral"
+};
+
+/* ================= CHIBI IDOL DOLLS (ref-matched) =================
+   Big round chibi head + auto black silhouette outline (like the ref art:
+   bold pixel dolls with dark outlines, round faces, raised cheering arms,
+   bell-shaped dress, contrast-color shoes). Each of the 8 fandom archetypes
+   gets its own hair silhouette so every idol reads as her own character. */
+function seg(list){ // expand [row,c1,c2] segments into [row,col] pixel list
+  const out=[];
+  list.forEach(([row,c1,c2])=>{ for(let c=c1;c<=c2;c++) out.push([row,c]); });
+  return out;
+}
+
+const FACE=seg([
+  [1,6,8],[2,5,9],[3,4,10],[4,4,10],[5,4,10],[6,4,10],[7,4,10],[8,5,9],[9,6,8]
+]);
+
+// small cat-ear ribbon clips worn by every idol (ref-matched signature accessory)
+const EAR_L=seg([[-1,0,4],[-2,0,3],[-3,1,2]]);
+const EAR_R=seg([[-1,10,14],[-2,11,14],[-3,12,13]]);
+
+const ARCHETYPE_STYLE={
+  "สายคลาสสิก":{ // blunt bob, ends at the jaw, straight sides
+    hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,11],[5,3,4],[5,10,11],[6,3,4],[6,10,11]]),
+    eyes:"default", outfit:"pinafore"
+  },
+  "สายเรียบร้อย":{ // long straight hair past the shoulders, center part
+    hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,4],[4,10,11],[5,3,4],[5,10,11],[6,3,4],[6,10,11],[7,3,4],[7,10,11],[8,3,4],[8,10,11],[9,3,4],[9,10,11]]),
+    eyes:"default", outfit:"modest"
+  },
+  "สายอบอุ่น":{ // asymmetric wavy bob, one side a little longer
+    hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,4],[4,10,11],[5,3,4],[5,10,11],[6,10,11],[7,10,11]]),
+    eyes:"default", outfit:"modest"
+  },
+  "สายสดใส":{ // small crown + big side ponytail poof
+    hair:seg([[0,5,9],[1,4,10],[2,3,4],[2,10,11],[3,3,4],[-2,10,12],[-1,10,13],[0,11,13],[1,11,12]]),
+    eyes:"default", outfit:"sailor"
+  },
+  "สายน่ารัก":{ // twin odango buns
+    hair:seg([[-1,2,4],[0,2,4],[1,2,4],[-1,10,12],[0,10,12],[1,10,12],[1,5,9],[2,4,10],[3,4,10]]),
+    eyes:"default", outfit:"pinafore"
+  },
+  "สายคุณหนู":{ // twin drill/ringlet curls hanging past the shoulders
+    hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,2,3],[4,11,12],[5,1,2],[5,12,13],[6,1,2],[6,12,13],[7,0,1],[7,13,14],[8,0,1],[8,13,14],[9,1,2],[9,12,13]]),
+    eyes:"default", outfit:"gothic"
+  },
+  "สายร็อก":{ // short choppy asymmetric spikes, undercut on one side
+    hair:seg([[-1,6,7],[-1,9,9],[0,5,10],[1,4,10],[2,4,4],[2,10,10],[3,10,10]]),
+    eyes:"default", outfit:"hoodie"
+  },
+  "สายลึกลับ":{ // long hair, heavy side-swept bang covers one eye
+    hair:seg([[0,4,10],[1,3,11],[2,3,4],[3,3,4],[4,3,4],[5,3,4],[2,10,11],[3,10,11],[4,10,11],[5,10,11],[6,10,11],[7,10,11],[8,10,11],[9,10,11]]),
+    hairOverEye:seg([[3,8,8],[4,8,8]]),
+    eyes:"default", outfit:"gothic"
+  },
+  "สายกินจุ":{ // low side braid trailing over one shoulder
+    hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,4],[3,10,11],[4,3,4],[4,10,12],[5,10,13],[6,11,13],[7,11,13],[8,11,12],[9,11,12]]),
+    eyes:"default", outfit:"wrap"
+  },
+  "สายไฟแรง":{ // short spiky pixie cut, ends above the chin
+    hair:seg([[-1,6,8],[0,4,10],[1,3,4],[1,10,11],[2,3,3],[2,11,11]]),
+    eyes:"default", outfit:"hoodie"
+  },
+  "สายกีฬา":{ // hair pulled back tight, small poof at the crown (ponytail)
+    hair:seg([[-2,6,8],[-1,5,9],[0,4,10],[1,4,4],[1,10,10]]),
+    bow:seg([[-3,7,8]]),
+    eyes:"default", outfit:"sailor"
+  },
+  "สายมั่นใจ":{ // sleek one-length bob, one side tucked shorter (asymmetric)
+    hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,4],[5,3,4],[6,3,4],[7,3,4],[8,3,4]]),
+    eyes:"default", outfit:"wrap"
+  }
+};
+
+function oseg(list){
+  const out=[];
+  list.forEach(([row,c1,c2,k])=>{ for(let c=c1;c<=c2;c++) out.push([row,c,k]); });
+  return out;
+}
+
+// Six genuinely different outfit silhouettes (not just recolors of one template) so idols
+// read as distinct characters at a glance, not "the same doll in a different shirt".
+const OUTFITS = {
+  pinafore:[ // collar + center ribbon + puffed sleeves + bell skirt w/ white apron hem
+    ...oseg([[10,6,8,'skin']]),
+    ...oseg([[11,4,10,'white']]),[11,3,'dress'],[11,11,'dress'],
+    [12,1,'skin'],[12,2,'dress'],[12,3,'dress'],[12,4,'dress'],[12,5,'white'],[12,6,'accent'],[12,7,'accent'],[12,8,'accent'],[12,9,'white'],[12,10,'dress'],[12,11,'dress'],[12,12,'dress'],[12,13,'skin'],
+    [13,2,'skin'],[13,3,'dress'],[13,4,'white'],[13,5,'white'],[13,6,'accent'],[13,7,'accent'],[13,8,'accent'],[13,9,'white'],[13,10,'white'],[13,11,'dress'],[13,12,'skin'],
+    [14,3,'skin'],[14,4,'dress'],[14,5,'white'],[14,6,'accent'],[14,7,'accent'],[14,8,'accent'],[14,9,'white'],[14,10,'dress'],[14,11,'skin'],
+    [15,4,'dress'],[15,5,'dress'],[15,6,'accent'],[15,7,'accent'],[15,8,'accent'],[15,9,'dress'],[15,10,'dress'],
+    ...oseg([[16,3,11,'dress'],[17,2,12,'dress'],[18,1,13,'dress'],[19,2,12,'white']]),
+    [20,5,'white'],[20,6,'white'],[20,9,'white'],[20,10,'white'],
+    [21,5,'shoe'],[21,6,'shoe'],[21,9,'shoe'],[21,10,'shoe']
+  ],
+  sailor:[ // flat sailor collar, V-neck with a neckerchief knot, pleated skirt, no apron
+    ...oseg([[10,6,8,'skin']]),
+    ...oseg([[11,3,11,'accent']]),
+    [12,1,'skin'],[12,2,'dress'],[12,3,'accent'],[12,4,'accent'],[12,5,'dress'],[12,6,'skin'],[12,7,'accent'],[12,8,'skin'],[12,9,'dress'],[12,10,'accent'],[12,11,'accent'],[12,12,'dress'],[12,13,'skin'],
+    [13,2,'skin'],[13,3,'dress'],[13,4,'dress'],[13,5,'dress'],[13,6,'accent'],[13,7,'accent'],[13,8,'accent'],[13,9,'dress'],[13,10,'dress'],[13,11,'dress'],[13,12,'skin'],
+    [14,3,'skin'],[14,4,'dress'],[14,5,'dress'],[14,6,'accent'],[14,7,'accent'],[14,8,'accent'],[14,9,'dress'],[14,10,'dress'],[14,11,'skin'],
+    ...oseg([[15,4,10,'dress']]),
+    ...oseg([[16,3,11,'dress'],[17,2,12,'dress'],[18,1,13,'dress']]),
+    ...oseg([[19,2,12,'accent']]),
+    [20,5,'white'],[20,6,'white'],[20,9,'white'],[20,10,'white'],
+    [21,5,'shoe'],[21,6,'shoe'],[21,9,'shoe'],[21,10,'shoe']
+  ],
+  hoodie:[ // baggy hoodie + kangaroo pocket + short shorts, bare legs, no skirt at all
+    ...oseg([[10,6,8,'skin']]),
+    ...oseg([[11,4,10,'dress']]),
+    ...oseg([[12,1,13,'dress']]),
+    ...oseg([[13,2,5,'dress'],[13,9,12,'dress'],[13,6,8,'accent']]),
+    [14,3,'skin'],[14,4,'dress'],[14,5,'dress'],[14,6,'accent'],[14,7,'accent'],[14,8,'accent'],[14,9,'dress'],[14,10,'dress'],[14,11,'skin'],
+    ...oseg([[15,4,10,'dress']]),
+    ...oseg([[16,3,11,'accent'],[17,3,11,'accent']]),
+    [18,4,'skin'],[18,5,'skin'],[18,9,'skin'],[18,10,'skin'],
+    [19,4,'white'],[19,5,'white'],[19,9,'white'],[19,10,'white'],
+    [20,4,'shoe'],[20,5,'shoe'],[20,9,'shoe'],[20,10,'shoe']
+  ],
+  gothic:[ // stand collar, laced corset bodice, poofy two-tier ruffled skirt
+    ...oseg([[10,6,8,'skin']]),
+    ...oseg([[11,4,10,'accent']]),
+    [12,1,'skin'],...oseg([[12,2,12,'dress']]),[12,6,'accent'],[12,8,'accent'],[12,13,'skin'],
+    [13,2,'skin'],...oseg([[13,3,11,'dress']]),[13,7,'accent'],[13,12,'skin'],
+    [14,3,'skin'],[14,4,'dress'],[14,5,'dress'],[14,6,'dress'],[14,7,'dress'],[14,8,'dress'],[14,9,'dress'],[14,10,'dress'],[14,11,'skin'],
+    ...oseg([[15,4,10,'dress']]),
+    ...oseg([[16,2,12,'dress']]),
+    ...oseg([[17,1,13,'accent']]),
+    ...oseg([[18,1,13,'dress']]),
+    ...oseg([[19,0,14,'accent']]),
+    [20,5,'white'],[20,6,'white'],[20,9,'white'],[20,10,'white'],
+    [21,5,'shoe'],[21,6,'shoe'],[21,9,'shoe'],[21,10,'shoe']
+  ],
+  wrap:[ // off-shoulder top, wrap knot, sarong skirt with a side slit, bare ankles/sandals
+    ...oseg([[11,4,10,'skin']]),
+    [12,1,'skin'],[12,2,'skin'],[12,3,'skin'],...oseg([[12,4,10,'dress']]),[12,11,'skin'],[12,12,'skin'],[12,13,'skin'],
+    [13,3,'skin'],[13,4,'dress'],[13,5,'dress'],[13,6,'dress'],[13,7,'dress'],[13,8,'dress'],[13,9,'dress'],[13,10,'dress'],[13,11,'skin'],
+    [14,4,'dress'],[14,5,'dress'],[14,6,'accent'],[14,7,'accent'],[14,8,'accent'],[14,9,'dress'],[14,10,'dress'],
+    ...oseg([[15,4,10,'dress']]),
+    [16,3,'dress'],[16,4,'dress'],[16,5,'dress'],[16,6,'dress'],[16,7,'dress'],[16,8,'dress'],[16,9,'dress'],[16,10,'skin'],[16,11,'skin'],
+    [17,2,'dress'],[17,3,'dress'],[17,4,'dress'],[17,5,'dress'],[17,6,'dress'],[17,7,'dress'],[17,8,'dress'],[17,9,'dress'],[17,10,'dress'],[17,11,'skin'],[17,12,'skin'],
+    ...oseg([[18,1,11,'dress']]),[18,12,'skin'],[18,13,'skin'],
+    ...oseg([[19,2,12,'accent']]),
+    [20,5,'skin'],[20,6,'skin'],[20,9,'skin'],[20,10,'skin'],
+    [21,5,'shoe'],[21,6,'shoe'],[21,9,'shoe'],[21,10,'shoe']
+  ],
+  modest:[ // high buttoned collar, long sleeves, long straight ankle-length skirt
+    ...oseg([[10,6,8,'skin']]),
+    ...oseg([[11,4,10,'dress']]),
+    ...oseg([[12,2,12,'dress']]),[12,7,'accent'],
+    ...oseg([[13,2,12,'dress']]),[13,7,'accent'],
+    [14,3,'skin'],[14,4,'dress'],[14,5,'dress'],[14,6,'dress'],[14,7,'accent'],[14,8,'dress'],[14,9,'dress'],[14,10,'dress'],[14,11,'skin'],
+    ...oseg([[15,4,10,'dress']]),[15,7,'accent'],
+    ...oseg([[16,3,11,'dress'],[17,2,12,'dress'],[18,2,12,'dress'],[19,2,12,'dress']]),
+    ...oseg([[20,5,9,'white']]),
+    [21,5,'shoe'],[21,6,'shoe'],[21,9,'shoe'],[21,10,'shoe']
+  ]
+};
+
+function shadeColor(hex,amt){
+  const n=parseInt(hex.slice(1),16);
+  let r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+  r=Math.max(0,Math.min(255,r+amt)); g=Math.max(0,Math.min(255,g+amt)); b=Math.max(0,Math.min(255,b+amt));
+  return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+
+function buildAvatarSVG(archName,{hair,skin,dress,accent}){
+  const style=ARCHETYPE_STYLE[archName]||ARCHETYPE_STYLE["สายคลาสสิก"];
+  const Wc=15,Hc=22,PAD=3;
+  const W=Wc+PAD*2, H=Hc+PAD*2;
+  const grid=new Map();
+  const key=(r,c)=>r+"_"+c;
+  const px=(row,col,color)=>{ grid.set(key(row+PAD,col+PAD),color); };
+
+  FACE.forEach(([r,c])=>px(r,c,skin));
+
+  // hair: dilate the base silhouette by 2px (4-directional) for extra bigness/volume,
+  // then redraw the real archetype shape on top so it still reads as its own silhouette
+  let dilated=new Set(style.hair.map(([r,c])=>r+"_"+c));
+  for(let i=0;i<2;i++){
+    const grown=new Set(dilated);
+    dilated.forEach(k=>{
+      const [r,c]=k.split("_").map(Number);
+      [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>grown.add((r+dr)+"_"+(c+dc)));
+    });
+    dilated=grown;
+  }
+  dilated.forEach(k=>{ const [r,c]=k.split("_").map(Number); px(r,c,hair); });
+  style.hair.forEach(([r,c])=>px(r,c,hair));
+
+  // hair shine: one contiguous highlight patch on the top-left of the hair for a rounder,
+  // less flat look (a scattered speckle reads as noise rather than volume).
+  const light=shadeColor(hair,55);
+  const hairByRow=new Map();
+  style.hair.forEach(([r,c])=>{ if(!hairByRow.has(r)) hairByRow.set(r,[]); hairByRow.get(r).push(c); });
+  const hairRows=[...hairByRow.keys()].sort((a,b)=>a-b).slice(0,2);
+  hairRows.forEach(r=>{
+    const cols=hairByRow.get(r).slice().sort((a,b)=>a-b).slice(0,2);
+    cols.forEach(c=>px(r,c,light));
+  });
+
+  // hair streaks: a couple of darker strands through the front bangs (like the ref art's
+  // maroon streaks) -- only recolors cells that are already hair, never adds new shape.
+  const streak=shadeColor(hair,-45);
+  [0,1,2].forEach(r=>{
+    [4,9].forEach(c=>{
+      const k=key(r+PAD,c+PAD);
+      if(grid.has(k)) grid.set(k,streak);
+    });
+  });
+
+  // face redrawn on top so it always reads through cleanly, even where hair was dilated
+  FACE.forEach(([r,c])=>px(r,c,skin));
+
+  if(style.eyes==="glasses"){
+    const frame="#5b4363";
+    px(5,4,frame);px(5,5,"#eaf6ff");px(5,6,frame);px(5,7,frame);px(5,8,frame);px(5,9,"#eaf6ff");px(5,10,frame);
+  } else {
+    // eyes: big round dark shape (anime-style). Both eyes catch the light from the same
+    // corner (top-right of each eye) rather than mirrored toward the nose -- a single,
+    // consistent light source reads as "cute" where mirrored dots read as "cross-eyed".
+    const eyeDark="#2a2330", glint="#ffffff", softGlint="#6e5f77", lowerLid="#4a3a45";
+    px(3,5,eyeDark);px(3,6,eyeDark);
+    px(3,8,eyeDark);px(3,9,eyeDark);
+    [4,5].forEach(r=>{
+      [5,6].forEach(c=>px(r,c,eyeDark));
+      [8,9].forEach(c=>px(r,c,eyeDark));
+    });
+    px(4,6,glint); px(4,9,glint); // bright sparkle, same corner (top-right) on both eyes
+    px(5,5,softGlint); px(5,8,softGlint); // dim highlight, same opposite corner (bottom-left) on both
+    px(6,6,lowerLid); px(6,8,lowerLid); // soft lower-lid line rounds the eye out
+  }
+  if(style.hairOverEye) style.hairOverEye.forEach(([r,c])=>px(r,c,hair));
+  px(6,4,"#ffb3cf"); px(6,10,"#ffb3cf"); // blush (on every idol, to match the ref art)
+  // (no mouth, per feedback -- reads cuter without one, matching the ref art)
+
+  if(style.tie) style.tie.forEach(([r,c])=>px(r,c,accent));
+  if(style.bow) style.bow.forEach(([r,c])=>px(r,c,accent));
+  if(style.band) style.band.forEach(([r,c])=>px(r,c,accent));
+  if(style.tiara) style.tiara.forEach(([r,c])=>px(r,c,accent));
+
+  // signature accessory worn by every idol, to match the ref art: small black cat-ear
+  // clips above the crown, plus a clean white ribbon headband across the bangs
+  const EARCOLOR="#2a2330", BAND="#f7f3ee";
+  EAR_L.forEach(([r,c])=>px(r,c,EARCOLOR));
+  EAR_R.forEach(([r,c])=>px(r,c,EARCOLOR));
+  for(let c=3;c<=11;c++) px(2,c,BAND);
+
+  // ---- body: pick this archetype's own outfit silhouette (see OUTFITS) ----
+  const WHITE="#f5f2ee", SHOE="#3a2e35";
+  const colorOf={skin,dress,accent,white:WHITE,shoe:SHOE};
+  (OUTFITS[style.outfit]||OUTFITS.pinafore).forEach(([r,c,k])=>px(r,c,colorOf[k]));
+
+  // auto black outline: any empty cell touching a filled cell
+  const filled=grid;
+  const outline=new Set();
+  filled.forEach((_,k)=>{
+    const [r,c]=k.split("_").map(Number);
+    [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{
+      const nr=r+dr, nc=c+dc, nk=key(nr,nc);
+      if(!filled.has(nk) && nr>=0 && nr<H && nc>=0 && nc<W) outline.add(nk);
+    });
+  });
+
+  let rects="";
+  outline.forEach(k=>{
+    const [r,c]=k.split("_").map(Number);
+    rects+=`<rect x="${c}" y="${r}" width="1" height="1" fill="#2a2330"/>`;
+  });
+  filled.forEach((color,k)=>{
+    const [r,c]=k.split("_").map(Number);
+    rects+=`<rect x="${c}" y="${r}" width="1" height="1" fill="${color}"/>`;
+  });
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+}
+
+
+const SHARP_EYE_BONUS = {
+  early: 2, // รอบ 1-5
+  mid: 4,   // รอบ 6-8
+  late: 6   // รอบ 9-10
+};
+
+function getSharpEyeBonus(currentRound){
+  if(currentRound <= 5) return SHARP_EYE_BONUS.early;
+  if(currentRound <= 8) return SHARP_EYE_BONUS.mid;
+  return SHARP_EYE_BONUS.late;
+}
+
+
+const FAN_COMMENTS = {
+  "ลือว่าจะได้เป็นเซ็นเตอร์คนใหม่": { plus:"เซ็นเตอร์หน้าใหม่ไฟแรง" },
+  "คลิปซ้อมกำลังถูกแชร์หนักมาก": { plus:"แฟนๆ เห็นความพยายาม" },
+  "มีข่าวว่าจะได้งานโฆษณาใหญ่": { plus:"โด่งดังขึ้นในชั่วข้ามคืน" },
+  "ถูกจับตาว่าเป็นดาวรุ่งของปีนี้": { plus:"ช่างเปล่งประกายเหลือเกิน" },
+  "ลือว่าจะได้ร้องท่อนฮุกในซิงเกิลใหม่": { plus:"เสียงร้องสะกดใจมาก" },
+  "แฟนคลับต่างชาติเริ่มพูดถึงอย่างหนัก": { plus:"ตกแฟนคลับต่างชาติได้สำเร็จ" },
+  "ถูกเชิญไปออกรายการวาไรตี้ชื่อดัง": { plus:"เข้าตากรรมการ" },
+  "มีข่าวว่าจะได้ขึ้นปกนิตยสารใหญ่": { plus:"นางแบบยังต้องชิดซ้าย" },
+
+  "ลือว่ากำลังเดตกับนักแสดง": { minus:"ข่าวฉาว แฟนๆ รับไม่ได้" },
+  "มีข่าวว่าจะพักงานกะทันหัน": { minus:"ข่าวคราวเงียบหายไปนานเลย" },
+  "โดนตั้งกระทู้วิจารณ์หนัก": { minus:"เต้นก็เพี้ยน ร้องก็ไม่ได้" },
+  "มีคนแฉว่าเข้าซ้อมสายเป็นประจำ": { minus:"ไม่พยายามเลยนะ" },
+  "ลือว่าทะเลาะกับสมาชิกในวง": { minus:"เหมือนจะมีคลิปตบกันหลุดออกมาเลย" },
+  "ถูกแฟนคลับจับผิดเรื่องคำพูดเก่า": { minus:"โกหกไม่ดูดิจิทัลฟุตพรินต์เลยนะ" },
+  "มีข่าวว่าอาจถูกลดบทในซิงเกิลหน้า": { minus:"ไอดอลตกอับก็แบบนี้แหละ" },
+  "ต้นสังกัดเรียกเข้าพบแบบกะทันหัน": { minus:"เหมือนจะทำผิดกฎร้ายแรงรึเปล่านะ" },
+
+  "เผลอกดไลก์โพสต์แปลก ๆ": { plus:"เธอเป็นคนฮาแบบนี้นี่เอง", minus:"ไอดอลไม่ควรดูคลิปแบบนี้นะ" },
+  "เปลี่ยนสีผมแบบไม่มีปี่มีขลุ่ย": { plus:"โอ้ เปลี่ยนคาแรคเตอร์", minus:"สีเก่าน่ารักกว่าแท้ๆ" },
+  "โพสต์สตอรี่สีดำตอนตีสาม": { plus:"มัวแต่ซ้อมไม่หลับไม่นอนสินะ", minus:"แอบคุยกับแฟนรึเปล่านะ..." },
+  "ถูกเห็นขึ้นรถตู้คันเดียวกับโปรดิวเซอร์": { plus:"งานน่าจะยุ่งมากเลยนะ", minus:"มีความสัมพันธ์เกินเลยรึเปล่า" },
+  "หายจากโซเชียลไปสองวัน": { plus:"คิดถึงจัง กลับมาเถอะ", minus:"กระแสจางพอดีสิแบบนี้" },
+  "โพสต์รูปอาหารหนึ่งจานโดยไม่เขียนอะไร": { plus:"อาร์ตตัวแม่", minus:"ไปกินกับใครน่ะ" },
+  "ลบรูปเก่าออกจากบัญชีเกือบทั้งหมด": { plus:"ได้เวลาเริ่มต้นใหม่", minus:"ได้ดีแล้วลืมเพื่อนเก่าหรอ" },
+  "มีคนเห็นที่สนามบินพร้อมกระเป๋าใบใหญ่": { plus:"ไอดอลไปเที่ยวไหนนะ", minus:"แอบไปกับแฟนรึเปล่า" },
+  "แฮชแท็กชื่อเธอติดเทรนด์แบบไม่มีสาเหตุ": { plus:"ความน่ารักจนเป็นไวรัล", minus:"คลิปหลุดรึเปล่านะ" },
+  "ตอบแฟนคลับด้วยอีโมจิเดียวทั้งคืน": { plus:"น่ารัก แบบที่ต้องตีความ", minus:"ตั้งใจคุยกับแฟนคลับหน่อยสิ" },
+  "เปลี่ยนรูปโปรไฟล์เป็นภาพแมว": { plus:"แมวน่ารัก คนก็น่ารัก", minus:"แมวใครน่ะ" },
+  "ถูกถ่ายติดในไลฟ์ของคนดังโดยบังเอิญ": { plus:"ได้รับแฟนคลับใหม่ๆ", minus:"เกาะคนอื่นดังชัดๆ" }
+};
+
+function getFanComment(result){
+  const data = FAN_COMMENTS[result.rumor.text];
+  if(!data) return "";
+  if(result.delta > 0) return data.plus || "";
+  if(result.delta < 0) return data.minus || "";
+  return "";
+}
+
+
+const TOTAL_ROUNDS = 10;
+let playerCount = 5;
+let playerDisplayName = "คุณ";
+let round = 1;
+let selected = null;
+let cards = [];
+let scores = {};
+let picks = {};
+let resultData = [];
+let myPick = null;
+let turnTimerInterval = null;
+let waitingTextInterval = null;
+let turnTimeLeft = 60;
+
+let playerStatsData = {
+  rounds:0,
+  uniquePicks:0,
+  sharedPicks:0,
+  trueNewsPicks:0,
+  fakeNewsPicks:0,
+  bestGain:0,
+  totalGain:0
+};
+
+const archetypes = [
+  // [ชื่อสายฟรี, สีผม, สีชุดหลัก, สีเน้น] -- แต่ละแถวไม่ซ้ำกันเลยทั้ง 3 สี
+  ["สายคลาสสิก","#3d2a1f","#5b7fc7","#d94f6b"],
+  ["สายเรียบร้อย","#241f26","#7a5aa8","#f0d27a"],
+  ["สายอบอุ่น","#8a5a3c","#c76b4a","#f5ece0"],
+  ["สายสดใส","#ff8fc4","#ffb84d","#ffffff"],
+  ["สายน่ารัก","#ffb6c8","#8ecae6","#ff6f91"],
+  ["สายคุณหนู","#e8c96a","#b56576","#6d597a"],
+  ["สายร็อก","#9b5de5","#3a3348","#ff206e"],
+  ["สายลึกลับ","#5c5470","#3d3450","#8a7ca8"],
+  ["สายกินจุ","#3a6b6b","#1f4e5f","#7fd8be"],
+  ["สายไฟแรง","#e05c3e","#453a42","#ffcf56"],
+  ["สายกีฬา","#4a7c59","#2f5d8a","#f2f2f2"],
+  ["สายมั่นใจ","#2b2320","#8a1f3d","#d4af37"]
+];
+
+
+const rumors = [
+  {kind:"good",text:"ลือว่าจะได้เป็นเซ็นเตอร์คนใหม่"},
+  {kind:"good",text:"คลิปซ้อมกำลังถูกแชร์หนักมาก"},
+  {kind:"good",text:"มีข่าวว่าจะได้งานโฆษณาใหญ่"},
+  {kind:"good",text:"ถูกจับตาว่าเป็นดาวรุ่งของปีนี้"},
+  {kind:"good",text:"ลือว่าจะได้ร้องท่อนฮุกในซิงเกิลใหม่"},
+  {kind:"good",text:"แฟนคลับต่างชาติเริ่มพูดถึงอย่างหนัก"},
+  {kind:"good",text:"ถูกเชิญไปออกรายการวาไรตี้ชื่อดัง"},
+  {kind:"good",text:"มีข่าวว่าจะได้ขึ้นปกนิตยสารใหญ่"},
+
+  {kind:"bad",text:"ลือว่ากำลังเดตกับนักแสดง"},
+  {kind:"bad",text:"มีข่าวว่าจะพักงานกะทันหัน"},
+  {kind:"bad",text:"โดนตั้งกระทู้วิจารณ์หนัก"},
+  {kind:"bad",text:"มีคนแฉว่าเข้าซ้อมสายเป็นประจำ"},
+  {kind:"bad",text:"ลือว่าทะเลาะกับสมาชิกในวง"},
+  {kind:"bad",text:"ถูกแฟนคลับจับผิดเรื่องคำพูดเก่า"},
+  {kind:"bad",text:"มีข่าวว่าอาจถูกลดบทในซิงเกิลหน้า"},
+  {kind:"bad",text:"ต้นสังกัดเรียกเข้าพบแบบกะทันหัน"},
+
+  {kind:"mystery",text:"เผลอกดไลก์โพสต์แปลก ๆ"},
+  {kind:"mystery",text:"เปลี่ยนสีผมแบบไม่มีปี่มีขลุ่ย"},
+  {kind:"mystery",text:"โพสต์สตอรี่สีดำตอนตีสาม"},
+  {kind:"mystery",text:"ถูกเห็นขึ้นรถตู้คันเดียวกับโปรดิวเซอร์"},
+  {kind:"mystery",text:"หายจากโซเชียลไปสองวัน"},
+  {kind:"mystery",text:"โพสต์รูปอาหารหนึ่งจานโดยไม่เขียนอะไร"},
+  {kind:"mystery",text:"ลบรูปเก่าออกจากบัญชีเกือบทั้งหมด"},
+  {kind:"mystery",text:"มีคนเห็นที่สนามบินพร้อมกระเป๋าใบใหญ่"},
+  {kind:"mystery",text:"แฮชแท็กชื่อเธอติดเทรนด์แบบไม่มีสาเหตุ"},
+  {kind:"mystery",text:"ตอบแฟนคลับด้วยอีโมจิเดียวทั้งคืน"},
+  {kind:"mystery",text:"เปลี่ยนรูปโปรไฟล์เป็นภาพแมว"},
+  {kind:"mystery",text:"ถูกถ่ายติดในไลฟ์ของคนดังโดยบังเอิญ"}
+];
+
+const botProfiles = [
+  {name:"เมย์",type:"สายตามกระแส",desc:"ชอบ Pt. สูง"},
+  {name:"ปู",type:"สายสวน",desc:"ชอบตัวกลาง"},
+  {name:"บอส",type:"สายข่าว",desc:"ชอบข่าวบวก"},
+  {name:"ฟ้า",type:"สายคำนวณ",desc:"ชอบตัวคุ้ม"},
+  {name:"นนท์",type:"สายสุ่ม",desc:"คาดเดายาก"},
+  {name:"เจ",type:"สายเซฟ",desc:"เลี่ยงข่าวร้าย"},
+  {name:"ออม",type:"สายเสี่ยง",desc:"ชอบข่าวกำกวม"}
+];
+
+function kindLabel(k){
+  return k==="good"?"ข่าวดี":k==="bad"?"ข่าวร้าย":"ข่าวกำกวม";
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function setupPlayerChoices(){
+  const box = document.getElementById("playerChoices");
+  box.innerHTML = "";
+  for(let n=3;n<=8;n++){
+    const b = document.createElement("button");
+    b.textContent = n+" คน";
+    if(n===playerCount) b.classList.add("selected");
+    b.onclick = ()=>{
+      playerCount=n;
+      setupPlayerChoices();
+      renderBotList();
+    };
+    box.appendChild(b);
+  }
+}
+
+function renderBotList(){
+  const box = document.getElementById("botList");
+  box.innerHTML = "";
+  const me = document.createElement("div");
+  me.className = "bot-item";
+  me.innerHTML = `<strong>${playerName.value.trim() || "คุณ"}</strong><span class="bot-tag me-tag">${pxicon("star",{main:"#2a2330",size:11})} ผู้เล่นจริง</span>`;
+  box.appendChild(me);
+
+  for(let i=0;i<playerCount-1;i++){
+    const p=botProfiles[i];
+    const div=document.createElement("div");
+    div.className="bot-item";
+    const iconName=botTypeIconName[p.type]||"mic";
+    div.innerHTML=`<span>${p.name}</span><span class="bot-tag">${pxicon(iconName,{main:"var(--pink-dark)",detail:"var(--gold-dark)",size:12})} ${p.type}</span>`;
+    box.appendChild(div);
+  }
+}
+
+function goRules(){
+  playerDisplayName = playerName.value.trim() || "คุณ";
+  rulesScore.textContent = "0";
+  showScreen("rules");
+}
+
+function startGame(){
+  round=1;
+  scores={};
+  scores[playerDisplayName]=0;
+  for(let i=0;i<playerCount-1;i++) scores[botProfiles[i].name]=0;
+
+  playerStatsData={rounds:0,uniquePicks:0,sharedPicks:0,trueNewsPicks:0,fakeNewsPicks:0,bestGain:0,totalGain:0};
+  totalPlayers.textContent=playerCount;
+  runCountdown();
+}
+
+function runCountdown(){
+  clearInterval(turnTimerInterval);
+  clearInterval(waitingTextInterval);
+
+  showScreen("countdown");
+  countRound.textContent=round;
+  countScore.textContent=formatScore(scores[playerDisplayName]||0);
+
+  let n=3;
+  countNum.textContent=n;
+  AudioFX.countdown(n);
+  const timer=setInterval(()=>{
+    n--;
+    if(n===0){
+      clearInterval(timer);
+      buildRound();
+      return;
+    }
+    countNum.textContent=n;
+  },650);
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function buildRound(){
+  selected=null;
+  const chosen=shuffle(archetypes).slice(0,playerCount);
+  const values=shuffle(Array.from({length:playerCount},(_,i)=>i+1));
+  const rumorPool=shuffle(rumors);
+
+  cards=chosen.map((a,i)=>({
+    name:a[0],hair:a[1],skin:"#ffdcc2",dress:a[2],accent:a[3],
+    base:values[i],rumor:rumorPool[i]
+  }));
+
+  renderGame();
+  waitingOverlay.style.display="none";
+  confirmBtn.style.display="block";
+  waitingText.style.display="block";
+  readyCount.textContent="0";
+  totalPlayers.textContent=playerCount;
+
+  turnTimeLeft=60;
+  turnTimer.textContent=turnTimeLeft;
+
+  clearInterval(turnTimerInterval);
+  turnTimerInterval=setInterval(()=>{
+    turnTimeLeft--;
+    turnTimer.textContent=turnTimeLeft;
+    if(turnTimeLeft<=0){
+      clearInterval(turnTimerInterval);
+      if(selected===null) selected=Math.floor(Math.random()*cards.length);
+      confirmChoice(true);
+    }
+  },1000);
+
+  showScreen("game");
+}
+
+function renderGame(){
+  gameRound.textContent=round;
+  gameScore.textContent=formatScore(scores[playerDisplayName]);
+
+  const grid=document.getElementById("cards");
+  grid.innerHTML="";
+
+  cards.forEach((card,idx)=>{
+    const div=document.createElement("div");
+    div.className="card kind-"+card.rumor.kind+(selected===idx?" selected":"");
+    div.onclick=()=>{
+      if(confirmBtn.style.display==="none") return;
+      selected=idx;
+      renderGame();
+    };
+    div.innerHTML=`
+      <span class="kind-tag ${card.rumor.kind}">${kindLabel(card.rumor.kind)}</span>
+      <div class="pixel-art">${buildAvatarSVG(card.name,{hair:card.hair,skin:card.skin,dress:card.dress,accent:card.accent})}<span class="spark">${pxicon("star",{main:"var(--gold)",size:11})}</span></div>
+      <div class="card-title">${card.name}</div>
+      <div class="base">${card.base} Pt.</div>
+      <div class="rumor">${card.rumor.text}</div>
+    `;
+    grid.appendChild(div);
+  });
+
+  waitingText.textContent=selected===null?"เลือกไอดอล 1 คน":"เลือกแล้ว: "+cards[selected].name;
+  readyCount.textContent=selected===null?"0":"1";
+}
+
+function botPick(profileIndex){
+  const p=botProfiles[profileIndex];
+
+  if(p.type==="สายตามกระแส"){
+    return cards.reduce((best,c,i)=>c.base>cards[best].base?i:best,0);
+  }
+
+  if(p.type==="สายสวน"){
+    const sorted=cards.map((c,i)=>[c.base,i]).sort((a,b)=>a[0]-b[0]);
+    return sorted[Math.min(2,sorted.length-1)][1];
+  }
+
+  if(p.type==="สายข่าว"){
+    const good=cards.map((c,i)=>[c,i]).filter(x=>x[0].rumor.kind==="good");
+    return good.length?good.sort((a,b)=>b[0].base-a[0].base)[0][1]:Math.floor(Math.random()*cards.length);
+  }
+
+  if(p.type==="สายคำนวณ"){
+    const expected=cards.map((c,i)=>{
+      let rumorBias=c.rumor.kind==="good"?1.2:c.rumor.kind==="bad"?.75:1;
+      return {i,value:c.base*rumorBias};
+    });
+    expected.sort((a,b)=>b.value-a.value);
+    return expected[Math.min(1,expected.length-1)].i;
+  }
+
+  if(p.type==="สายเซฟ"){
+    const safe=cards.map((c,i)=>[c,i]).filter(x=>x[0].rumor.kind!=="bad");
+    return safe.length?safe.sort((a,b)=>b[0].base-a[0].base)[0][1]:Math.floor(Math.random()*cards.length);
+  }
+
+  if(p.type==="สายเสี่ยง"){
+    const mystery=cards.map((c,i)=>[c,i]).filter(x=>x[0].rumor.kind==="mystery");
+    return mystery.length?mystery[Math.floor(Math.random()*mystery.length)][1]:Math.floor(Math.random()*cards.length);
+  }
+
+  return Math.floor(Math.random()*cards.length);
+}
+
+function resolveRumor(rumor){
+  const isTrue=Math.random()<0.6;
+  if(!isTrue) return {truth:"ปลอม",delta:0};
+
+  if(rumor.kind==="good"){
+    return {truth:"จริง",delta:1+Math.floor(Math.random()*4)};
+  }
+
+  if(rumor.kind==="bad"){
+    return {truth:"จริง",delta:-(1+Math.floor(Math.random()*4))};
+  }
+
+  const options=[-4,-3,-2,2,3,4];
+  return {truth:"จริง",delta:options[Math.floor(Math.random()*options.length)]};
+}
+
+function confirmChoice(auto=false){
+  if(selected===null){
+    waitingText.textContent="ยังไม่ได้เลือกไอดอล";
+    return;
+  }
+
+  clearInterval(turnTimerInterval);
+  AudioFX.confirm();
+  confirmBtn.style.display="none";
+  waitingText.style.display="none";
+  waitingOverlay.style.display="block";
+
+  const waitMessages=[
+    "กำลังรอผู้เล่นคนอื่น...",
+    "กำลังเช็กข่าวลือในบอร์ด...",
+    "กำลังส่องสตอรี่...",
+    "กำลังเถียงกับตัวเอง..."
+  ];
+  let msgIndex=0;
+  waitingMessage.textContent=waitMessages[0];
+  clearInterval(waitingTextInterval);
+  waitingTextInterval=setInterval(()=>{
+    msgIndex=(msgIndex+1)%waitMessages.length;
+    waitingMessage.textContent=waitMessages[msgIndex];
+  },1000);
+
+  let simulatedReady=1;
+  readyCount.textContent=simulatedReady;
+  const readyAnim=setInterval(()=>{
+    if(simulatedReady<playerCount){
+      simulatedReady++;
+      readyCount.textContent=simulatedReady;
+    }
+    if(simulatedReady>=playerCount){
+      clearInterval(readyAnim);
+      clearInterval(waitingTextInterval);
+      setTimeout(resolveRound,350);
+    }
+  },280);
+}
+
+function resolveRound(){
+  myPick=selected;
+  picks={};
+  picks[playerDisplayName]=selected;
+
+  for(let i=0;i<playerCount-1;i++){
+    picks[botProfiles[i].name]=botPick(i);
+  }
+
+  const counts={};
+  Object.values(picks).forEach(i=>counts[i]=(counts[i]||0)+1);
+
+  resultData=cards.map((card,idx)=>{
+    const res=resolveRumor(card.rumor);
+    const finalScore=Math.max(0,card.base+res.delta);
+    const pickCount=counts[idx]||0;
+    const sharpEyeBonus=pickCount===1 ? getSharpEyeBonus(round) : 0;
+    return {...card,...res,finalScore,pickCount,sharpEyeBonus,index:idx};
+  });
+
+  Object.entries(picks).forEach(([name,idx])=>{
+    const picked=resultData[idx];
+    const baseGain=picked.finalScore/(counts[idx]||1);
+    scores[name]+=baseGain+picked.sharpEyeBonus;
+  });
+
+  const myResult=resultData[myPick];
+  const myGain=(myResult.finalScore/myResult.pickCount)+myResult.sharpEyeBonus;
+  playerStatsData.rounds++;
+  playerStatsData.totalGain+=myGain;
+  playerStatsData.bestGain=Math.max(playerStatsData.bestGain,myGain);
+  if(myResult.pickCount===1) playerStatsData.uniquePicks++;
+  else playerStatsData.sharedPicks++;
+  if(myResult.truth==="จริง") playerStatsData.trueNewsPicks++;
+  else playerStatsData.fakeNewsPicks++;
+
+  startReveal();
+}
+
+function startReveal(){
+  revealRound.textContent=round;
+  revealScore.textContent=formatScore(scores[playerDisplayName]);
+  resultAction.style.display="none";
+  revealNote.textContent="กำลังเปิดผลทีละรายการ...";
+
+  const list=document.getElementById("revealList");
+  list.innerHTML="";
+
+  const ordered=[...resultData].sort((a,b)=>{
+    if(a.index===myPick) return -1;
+    if(b.index===myPick) return 1;
+    if(a.truth!==b.truth) return (b.truth==="จริง")-(a.truth==="จริง");
+    return b.finalScore-a.finalScore;
+  });
+
+  ordered.forEach((r,orderIdx)=>{
+    const mine=r.index===myPick;
+    const deltaClass=r.delta>0?"plus":r.delta<0?"minus":"zero";
+    const deltaText=r.delta>0?`+${r.delta}`:`${r.delta}`;
+
+    const d=document.createElement("div");
+    setTimeout(() => {
+      AudioFX.reveal();
+      if (r.truth === "จริง") {
+        AudioFX.newsTrue();
+      }
+    }, orderIdx * 150);
+
+    d.className="reveal-card "+(r.truth==="จริง"?"true":"false")+(mine?" mine":"")+(r.sharpEyeBonus>0?" sharp-eye":"");
+
+    d.innerHTML=`
+      ${mine?'<div class="mine-banner">ไอดอลที่คุณเลือก</div>':""}
+      <div class="reveal-main">
+        <div class="reveal-left">
+          <div class="result-pixel">${buildAvatarSVG(r.name,{hair:r.hair,skin:r.skin,dress:r.dress,accent:r.accent})}<span class="spark">${pxicon("star",{main:"var(--gold)",size:9})}</span></div>
+          <div class="reveal-name">${r.name}</div>
+          <span class="kind-tag ${r.rumor.kind}" style="align-self:center">${kindLabel(r.rumor.kind)}</span>
+          <span class="badge">${r.truth==="จริง"?"ข่าวจริง":"ข่าวปลอม"}</span>
+        </div>
+        <div class="reveal-body">
+          <div class="score-head">
+            <span class="base">${r.finalScore} Pt.</span>
+            <span class="delta-inline ${deltaClass}">${deltaText}</span>
+          </div>
+          <div class="rumor" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.rumor.text}</div>
+          <div id="picker-icons-${r.index}" class="picker-icons"></div>
+          ${r.sharpEyeBonus>0?`<div class="sharp-eye-bonus" style="animation-delay:${(orderIdx*150)+700}ms">★ โบนัสตาแหลมคม +${r.sharpEyeBonus} Pt.</div>`:""}
+          ${mine && getFanComment(r)
+            ? `<div class="fan-comment">${getFanComment(r)}</div>`
+            : ""
+          }
+        </div>
+      </div>
+    `;
+
+    list.appendChild(d);
+    setTimeout(()=>d.classList.add("show"),150*orderIdx);
+  });
+
+  showScreen("reveal");
+
+  setTimeout(
+    showPickIcons,
+    Math.max(1200,ordered.length*150+450)
+  );
+}
+
+function showPickIcons(){
+  const sharpEyeResults=resultData.filter(r=>r.sharpEyeBonus>0);
+  sharpEyeResults.forEach((r,i)=>{
+    setTimeout(()=>AudioFX.sharpEye(),i*180);
+  });
+
+  resultData.filter(r=>r.pickCount>0).forEach((r,cardOrder)=>{
+    const holder=document.getElementById(`picker-icons-${r.index}`);
+    if(!holder) return;
+
+    const chosenBy=Object.entries(picks)
+      .filter(([_,idx])=>idx===r.index)
+      .map(([name])=>name);
+
+    chosenBy.forEach((name,iconIndex)=>{
+      const person=document.createElement("span");
+      person.className="person-dot"+(name===playerDisplayName?" me":"");
+      person.title=name;
+      person.style.animationDelay=`${(cardOrder*100)+(iconIndex*90)}ms`;
+      holder.appendChild(person);
+    });
+
+    const gain=r.finalScore/r.pickCount;
+    const summary=document.createElement("span");
+    summary.className="pick-score-summary"+(r.index===myPick?" mine":"");
+    summary.textContent=r.sharpEyeBonus>0
+      ? `${r.finalScore} ÷ ${r.pickCount} + ${r.sharpEyeBonus} = ${formatScore(gain+r.sharpEyeBonus)} Pt.`
+      : `${r.finalScore} ÷ ${r.pickCount} = ${formatScore(gain)} Pt.`;
+    summary.style.animationDelay=`${(cardOrder*100)+(chosenBy.length*90)+60}ms`;
+    holder.appendChild(summary);
+  });
+
+  AudioFX.crowd();
+  revealNote.textContent="ไอคอนแสดงจำนวนคนที่เลือกในแต่ละคน";
+  resultAction.style.display="block";
+}
+
+function showStandings(){
+  standRound.textContent=round;
+  standScore.textContent=formatScore(scores[playerDisplayName]);
+
+  const ranking=getRanking();
+  const last=ranking[ranking.length-1];
+
+  leaderBox.innerHTML=`${pxicon("trophy",{main:"var(--gold-dark)",detail:"var(--gold)",size:16})} อันดับ 1 : ${ranking[0][0]} (${formatScore(ranking[0][1])} Pt.)`;
+  lastBox.innerHTML=`${pxicon("raincloud",{main:"var(--muted)",detail:"var(--cyan)",size:16})} อันดับสุดท้าย : ${last[0]} (${formatScore(last[1])} Pt.)`;
+
+  nextBtn.textContent=round>=TOTAL_ROUNDS?"ดูผลสรุปเกม":"เล่นรอบต่อไป";
+  showScreen("standings");
+}
+
+function nextRound(){
+  if(round>=TOTAL_ROUNDS){
+    renderFinal();
+    showScreen("final");
+    return;
+  }
+  round++;
+  runCountdown();
+}
+
+function getRanking(){
+  return Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+}
+
+function getPlayerTitle(){
+  if(playerStatsData.uniquePicks>=7){
+    return ["นักขุดเพชรแห่งวงการ","คุณเลือกตัวที่ไม่มีใครกล้าแตะได้อย่างสม่ำเสมอ"];
+  }
+  if(playerStatsData.trueNewsPicks>=7){
+    return ["นักสืบกระทู้ลับ","คุณเชื่อข่าวถูกบ่อยจนน่าสงสัย"];
+  }
+  if(playerStatsData.fakeNewsPicks>=7){
+    return ["ราชาแห่งข่าวปั่น","ข่าวปลอมไม่เคยทำให้คุณหมดศรัทธา"];
+  }
+  if(playerStatsData.bestGain>=7){
+    return ["ตาเหยี่ยวช็อตเดียวพลิกเกม","คุณเคยได้รอบใหญ่แบบที่โต๊ะต้องเงียบ"];
+  }
+  if(playerStatsData.sharedPicks>=7){
+    return ["โอตะสายเมนสตรีม","คุณมักยืนอยู่ในที่ที่ทุกคนยืนอยู่แล้ว"];
+  }
+  return ["นักวิเคราะห์โต๊ะกาแฟ","คุณเล่นสมดุล อ่านทั้งข่าวและอ่านทั้งเพื่อน"];
+}
+
+function renderFinal(){
+  const ranking=getRanking();
+  winnerName.textContent=`${ranking[0][0]} · ${formatScore(ranking[0][1])} Pt.`;
+
+  finalRank.innerHTML="";
+  ranking.forEach(([name,score],i)=>{
+    const div=document.createElement("div");
+    div.className="rank-row"+(i===0?" rank-1":i===1?" rank-2":i===2?" rank-3":"");
+    const medalColors={0:["#e3972f","#ffd873"],1:["#9aa0ad","#e4e8ee"],2:["#b06a3a","#e3a56e"]};
+    const medal=i<3?pxicon("medal",{main:medalColors[i][0],detail:medalColors[i][1],size:16}):`${i+1}.`;
+    div.innerHTML=`<span>${medal} ${name}</span><strong>${formatScore(score)} Pt.</strong>`;
+    finalRank.appendChild(div);
+  });
+
+  const [title,desc]=getPlayerTitle();
+  playerTitle.textContent=title;
+  playerTitleDesc.textContent=desc;
+
+  const avg=playerStatsData.totalGain/Math.max(1,playerStatsData.rounds);
+  playerStats.innerHTML=
+    `เลือกคนเดียว ${playerStatsData.uniquePicks} รอบ · `+
+    `ชนกับคนอื่น ${playerStatsData.sharedPicks} รอบ · `+
+    `ข่าวจริง ${playerStatsData.trueNewsPicks} รอบ · `+
+    `ข่าวปลอม ${playerStatsData.fakeNewsPicks} รอบ · `+
+    `เฉลี่ย ${formatScore(avg)} Pt./รอบ · `+
+    `ดีที่สุด ${formatScore(playerStatsData.bestGain)} Pt.`;
+}
+
+function resetGame(){
+  clearInterval(turnTimerInterval);
+  clearInterval(waitingTextInterval);
+  round=1;selected=null;cards=[];scores={};picks={};resultData=[];myPick=null;
+  showScreen("home");
+}
+
+function formatScore(v){
+  return Number.isInteger(v)?String(v):v.toFixed(2).replace(/0+$/,"").replace(/\.$/,"");
+}
+
+function mountIcons(){
+  document.querySelectorAll("[data-icon]").forEach(el=>{
+    const name=el.dataset.icon;
+    const main=el.dataset.iconMain||"currentColor";
+    const detail=el.dataset.iconDetail||null;
+    const size=el.dataset.iconSize?Number(el.dataset.iconSize):14;
+    el.outerHTML=pxicon(name,{main,detail,size,extraClass:"static-icon"});
+  });
+}
+
+mountIcons();
+
+/* ================= SOUND SYSTEM ================= */
+const AudioFX = {
+  ctx: null,
+  master: null,
+  musicGain: null,
+  sfxGain: null,
+  musicEnabled: true,
+  bgmTimer: null,
+  step: 0,
+
+  init(){
+    if(this.ctx) return;
+
+    const AC = window.AudioContext || window.webkitAudioContext;
+    this.ctx = new AC();
+
+    this.master = this.ctx.createGain();
+    this.musicGain = this.ctx.createGain();
+    this.sfxGain = this.ctx.createGain();
+
+    this.master.gain.value = 0.9;
+    this.musicGain.gain.value = 0.32;
+    this.sfxGain.gain.value = 0.55;
+
+    this.musicGain.connect(this.master);
+    this.sfxGain.connect(this.master);
+    this.master.connect(this.ctx.destination);
+
+    this.startBGM();
+    this.updateToggleLabel();
+  },
+
+  ensureRunning(){
+    if(this.ctx && this.ctx.state === "suspended"){
+      this.ctx.resume();
+    }
+  },
+
+  makeOsc(freq, start, duration, type, volume, destination){
+    if(!this.ctx) return;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, start);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(type === "square" ? 1800 : 2800, start);
+    filter.Q.value = 0.6;
+
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, volume), start + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(destination);
+
+    osc.start(start);
+    osc.stop(start + duration + 0.02);
+  },
+
+  noiseHit(start, duration=0.06, volume=0.015){
+    if(!this.ctx) return;
+
+    const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * duration, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++){
+      data[i] = (Math.random()*2-1) * (1 - i/data.length);
+    }
+
+    const src = this.ctx.createBufferSource();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    src.buffer = buffer;
+    filter.type = "highpass";
+    filter.frequency.value = 3500;
+    gain.gain.value = volume;
+
+    src.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.musicGain);
+
+    src.start(start);
+  },
+
+  click(){
+    this.ensureRunning();
+    const t = this.ctx?.currentTime || 0;
+    this.makeOsc(760, t, 0.07, "square", 0.04, this.sfxGain);
+  },
+
+  confirm(){
+    this.ensureRunning();
+    if(!this.ctx) return;
+    const t = this.ctx.currentTime;
+    this.makeOsc(523.25, t, 0.11, "square", 0.05, this.sfxGain);
+    this.makeOsc(783.99, t+0.08, 0.17, "square", 0.04, this.sfxGain);
+  },
+
+  reveal(){
+    this.ensureRunning();
+    if(!this.ctx) return;
+    const t = this.ctx.currentTime;
+    this.makeOsc(440, t, 0.09, "triangle", 0.035, this.sfxGain);
+    this.makeOsc(587.33, t+0.07, 0.09, "triangle", 0.032, this.sfxGain);
+    this.makeOsc(783.99, t+0.14, 0.14, "triangle", 0.03, this.sfxGain);
+  },
+
+  startBGM(){
+    if(this.bgmTimer) clearInterval(this.bgmTimer);
+
+    // 100 BPM, 16-step loop. Bright lo-fi/city-pop inspired harmony.
+    const bpm = 100;
+    const stepMs = (60000 / bpm) / 4;
+
+    const chordProgression = [
+      [261.63,329.63,392.00,493.88],  // Cmaj7
+      [220.00,261.63,329.63,392.00],  // Am7
+      [174.61,220.00,261.63,349.23],  // Fmaj7
+      [196.00,246.94,293.66,392.00]   // G7
+    ];
+
+    const bassRoots = [130.81,110.00,87.31,98.00];
+    const melody = [
+      659.25,0,587.33,0,
+      523.25,587.33,659.25,0,
+      698.46,0,659.25,587.33,
+      523.25,0,493.88,0
+    ];
+
+    this.bgmTimer = setInterval(()=>{
+      if(!this.ctx || !this.musicEnabled || document.hidden) return;
+
+      const active = document.querySelector(".screen.active");
+      if(!active) return;
+
+      const now = this.ctx.currentTime + 0.03;
+      const s = this.step % 16;
+      const chordIndex = Math.floor(s / 4);
+      const chord = chordProgression[chordIndex];
+
+      // Soft electric-piano chord on beats 1 and 3
+      if(s % 4 === 0 || s % 4 === 2){
+        chord.forEach((freq,i)=>{
+          this.makeOsc(freq, now, 0.34, "triangle", 0.010 - i*0.0012, this.musicGain);
+        });
+      }
+
+      // Warm bass line
+      if(s % 4 === 0){
+        this.makeOsc(bassRoots[chordIndex], now, 0.22, "sine", 0.027, this.musicGain);
+      }else if(s % 4 === 2){
+        this.makeOsc(bassRoots[chordIndex]*1.5, now, 0.16, "sine", 0.018, this.musicGain);
+      }
+
+      // Sparkly city-pop lead
+      const lead = melody[s];
+      if(lead){
+        this.makeOsc(lead, now, 0.12, "triangle", 0.012, this.musicGain);
+      }
+
+      // Gentle lo-fi hi-hat
+      if(s % 2 === 1){
+        this.noiseHit(now, 0.045, 0.006);
+      }
+
+      // Soft kick impression
+      if(s === 0 || s === 8){
+        this.makeOsc(70, now, 0.11, "sine", 0.028, this.musicGain);
+      }
+
+      this.step++;
+    }, stepMs);
+  },
+
+
+  
+
+  sharpEye(){
+    this.ensureRunning();
+    if(!this.ctx) return;
+    const t=this.ctx.currentTime;
+    this.makeOsc(659.25,t,0.09,"triangle",0.05,this.sfxGain);
+    this.makeOsc(880,t+0.07,0.11,"triangle",0.046,this.sfxGain);
+    this.makeOsc(1174.66,t+0.15,0.18,"triangle",0.042,this.sfxGain);
+    this.makeOsc(1318.51,t+0.23,0.22,"sine",0.026,this.sfxGain);
+  },
+
+  newsTrue(){
+    this.ensureRunning();
+    if(!this.ctx) return;
+    const t = this.ctx.currentTime;
+
+    this.makeOsc(784, t, 0.08, "triangle", 0.05, this.sfxGain);
+    this.makeOsc(988, t + 0.08, 0.10, "triangle", 0.045, this.sfxGain);
+    this.makeOsc(1175, t + 0.16, 0.16, "triangle", 0.04, this.sfxGain);
+  },
+
+  crowd(){
+    this.ensureRunning();
+    if(!this.ctx) return;
+
+    for(let i = 0; i < 12; i++){
+      setTimeout(() => {
+        this.noiseHit(this.ctx.currentTime, 0.08, 0.008);
+      }, i * 25);
+    }
+  },
+
+countdown(num){
+    this.ensureRunning();
+    if(!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+
+    if(num > 1){
+      this.makeOsc(880, t, 0.08, "square", 0.05, this.sfxGain);
+      this.makeOsc(660, t + 0.08, 0.08, "square", 0.035, this.sfxGain);
+    }else{
+      this.makeOsc(523.25, t, 0.10, "square", 0.06, this.sfxGain);
+      this.makeOsc(659.25, t + 0.08, 0.10, "square", 0.05, this.sfxGain);
+      this.makeOsc(783.99, t + 0.16, 0.16, "square", 0.04, this.sfxGain);
+    }
+  },
+
+  toggleMusic(){
+
+    this.init();
+    this.musicEnabled = !this.musicEnabled;
+    this.musicGain.gain.cancelScheduledValues(this.ctx.currentTime);
+    this.musicGain.gain.setTargetAtTime(this.musicEnabled ? 0.32 : 0.0001, this.ctx.currentTime, 0.04);
+    this.updateToggleLabel();
+  },
+
+  updateToggleLabel(){
+    const btn = document.getElementById("musicToggle");
+    if(btn) btn.textContent = this.musicEnabled ? "BGM ON" : "BGM OFF";
+  }
+};
+
+document.addEventListener("pointerdown", () => { AudioFX.init(); AudioFX.ensureRunning(); }, { once:true });
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".btn")) AudioFX.click();
+  if (e.target.closest(".card")) AudioFX.click();
+});
+
+
+playerName.addEventListener("input",renderBotList);
+setupPlayerChoices();
+renderBotList();
+</script>
+</body>
+</html>
