@@ -394,6 +394,93 @@ input::placeholder{color:#655c85}
   to{opacity:1;transform:translateY(0) scale(1)}
 }
 
+
+/* ---------- fixed reveal layout ---------- */
+.reveal-main{
+  display:grid;
+  grid-template-columns:64px minmax(0,1fr);
+  grid-template-rows:auto 1fr auto;
+  gap:7px 10px;
+  align-items:start;
+}
+
+.reveal-left{
+  grid-column:1;
+  grid-row:1 / 4;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.result-pixel{
+  width:64px;
+  height:88px;
+}
+
+.reveal-body{
+  grid-column:2;
+  grid-row:1 / 4;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+  padding-top:1px;
+}
+
+.reveal-name-top{
+  font-size:13px;
+  line-height:1.25;
+  font-weight:900;
+  margin:0 0 4px;
+  padding-right:74px;
+}
+
+.reveal-result-top{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.reveal-bottom{
+  margin-top:auto;
+  padding-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.reveal-bottom .rumor{
+  margin-top:0;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+.reveal-bottom .picker-icons{
+  margin-top:0;
+}
+
+@media (max-height:850px){
+  .result-pixel{width:54px;height:74px}
+  .reveal-main{grid-template-columns:54px minmax(0,1fr);gap:6px 8px}
+  .reveal-name-top{font-size:12px}
+}
+
+
+/* ----- compact idol names for unselected cards ----- */
+.reveal-card:not(.mine) .reveal-name-top{
+  font-size:11px;
+  white-space:nowrap;
+  overflow:visible;
+  text-overflow:clip;
+  line-height:1.1;
+}
+
+.reveal-card.mine .reveal-name-top{
+  white-space:normal;
+}
+
 </style>
 </head>
 <body>
@@ -433,17 +520,28 @@ input::placeholder{color:#655c85}
     <div class="pill">Pt. ของคุณ <span id="rulesScore">0</span></div>
   </div>
 
+  
+  <div class="panel">
+    <h2>เรื่องราวของเกม</h2>
+    <div class="example" style="line-height:1.8">
+      คุณคือโอตะที่พยายามมองหา “ดาวดวงต่อไป” ของวงไอดอลหน้าใหม่<br>
+      ทุกสัปดาห์จะมีข่าวลือ ข่าวฉาว และกระแสบนโลกออนไลน์เกิดขึ้นมากมาย<br>
+      ไม่มีใครรู้ว่าข่าวไหนจริงหรือปลอม หน้าที่ของคุณคือเลือกเชียร์ไอดอลให้ถูกคน และพิสูจน์ว่า<br>
+      <strong>คุณคือแฟนพันธุ์แท้ที่มีสายตาแหลมคมที่สุด</strong>
+    </div>
+  </div>
+
   <div class="panel">
     <h2>กติกาแบบรวบรัด</h2>
     <ul>
       <li>แต่ละรอบ เลือกไอดอล 1 คน</li>
-      <li>ไอดอลมี Pt. พื้นฐานและข่าวลือ</li>
+      <li>ไอดอลมีคะแนน (Pt) พื้นฐานและข่าวลือ</li>
       <li>ข่าวลืออาจจริงหรือปลอม</li>
-      <li>ถ้าจริง Pt. อาจเพิ่ม ลด หรือพลิกได้</li>
-      <li>ถ้ามีหลายคนเลือกคนเดียวกัน Pt. จะถูกหารกัน</li>
-      <li>ถ้าเลือกไอดอลคนเดียว จะได้โบนัสตาแหลมคม +2 / +4 / +6 Pt. ตามช่วงเกม</li>
+      <li>ถ้าจริง คะแนน (Pt) อาจเพิ่ม ลด หรือพลิกได้</li>
+      <li>ถ้ามีหลายคนเลือกคนเดียวกัน คะแนน (Pt) จะถูกหารกัน</li>
+      <li>ถ้าเลือกไอดอลคนเดียว จะได้โบนัสตาแหลมคม +2 / +4 / +6 คะแนน (Pt) ตามช่วงเกม</li>
     </ul>
-    <div class="example">ไอดอล 8 Pt. มีคนเลือก 4 คน → คนละ 2 Pt.<br>ไอดอล 5 Pt. มีคนเลือกคนเดียว → ได้ 5 Pt. เต็ม</div>
+    <div class="example">ไอดอล 8 คะแนน (Pt) มีคนเลือก 4 คน → คนละ 2 คะแนน (Pt)<br>ไอดอล 5 คะแนน (Pt) มีคนเลือกคนเดียว → ได้ 5 คะแนน (Pt) เต็ม</div>
   </div>
 
   <div class="footer-action"><button class="btn" onclick="startGame()">พร้อมแล้ว เริ่มเกม</button></div>
@@ -727,53 +825,53 @@ const EAR_L=seg([[-1,0,4],[-2,0,3],[-3,1,2]]);
 const EAR_R=seg([[-1,10,14],[-2,11,14],[-3,12,13]]);
 
 const ARCHETYPE_STYLE={
-  "สายคลาสสิก":{ // blunt bob, ends at the jaw, straight sides
+  "ไอดอลสายคลาสสิก":{ // blunt bob, ends at the jaw, straight sides
     hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,11],[5,3,4],[5,10,11],[6,3,4],[6,10,11]]),
     eyes:"default", outfit:"pinafore"
   },
-  "สายเรียบร้อย":{ // long straight hair past the shoulders, center part
+  "ไอดอลสายเรียบร้อย":{ // long straight hair past the shoulders, center part
     hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,4],[4,10,11],[5,3,4],[5,10,11],[6,3,4],[6,10,11],[7,3,4],[7,10,11],[8,3,4],[8,10,11],[9,3,4],[9,10,11]]),
     eyes:"default", outfit:"modest"
   },
-  "สายอบอุ่น":{ // asymmetric wavy bob, one side a little longer
+  "ไอดอลสายอบอุ่น":{ // asymmetric wavy bob, one side a little longer
     hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,4],[4,10,11],[5,3,4],[5,10,11],[6,10,11],[7,10,11]]),
     eyes:"default", outfit:"modest"
   },
-  "สายสดใส":{ // small crown + big side ponytail poof
+  "ไอดอลสายสดใส":{ // small crown + big side ponytail poof
     hair:seg([[0,5,9],[1,4,10],[2,3,4],[2,10,11],[3,3,4],[-2,10,12],[-1,10,13],[0,11,13],[1,11,12]]),
     eyes:"default", outfit:"sailor"
   },
-  "สายน่ารัก":{ // twin odango buns
+  "ไอดอลสายน่ารัก":{ // twin odango buns
     hair:seg([[-1,2,4],[0,2,4],[1,2,4],[-1,10,12],[0,10,12],[1,10,12],[1,5,9],[2,4,10],[3,4,10]]),
     eyes:"default", outfit:"pinafore"
   },
-  "สายคุณหนู":{ // twin drill/ringlet curls hanging past the shoulders
+  "ไอดอลสายคุณหนู":{ // twin drill/ringlet curls hanging past the shoulders
     hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,2,3],[4,11,12],[5,1,2],[5,12,13],[6,1,2],[6,12,13],[7,0,1],[7,13,14],[8,0,1],[8,13,14],[9,1,2],[9,12,13]]),
     eyes:"default", outfit:"gothic"
   },
-  "สายร็อก":{ // short choppy asymmetric spikes, undercut on one side
+  "ไอดอลสายร็อก":{ // short choppy asymmetric spikes, undercut on one side
     hair:seg([[-1,6,7],[-1,9,9],[0,5,10],[1,4,10],[2,4,4],[2,10,10],[3,10,10]]),
     eyes:"default", outfit:"hoodie"
   },
-  "สายลึกลับ":{ // long hair, heavy side-swept bang covers one eye
+  "ไอดอลสายลึกลับ":{ // long hair, heavy side-swept bang covers one eye
     hair:seg([[0,4,10],[1,3,11],[2,3,4],[3,3,4],[4,3,4],[5,3,4],[2,10,11],[3,10,11],[4,10,11],[5,10,11],[6,10,11],[7,10,11],[8,10,11],[9,10,11]]),
     hairOverEye:seg([[3,8,8],[4,8,8]]),
     eyes:"default", outfit:"gothic"
   },
-  "สายกินจุ":{ // low side braid trailing over one shoulder
+  "ไอดอลสายกินจุ":{ // low side braid trailing over one shoulder
     hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,4],[3,10,11],[4,3,4],[4,10,12],[5,10,13],[6,11,13],[7,11,13],[8,11,12],[9,11,12]]),
     eyes:"default", outfit:"wrap"
   },
-  "สายไฟแรง":{ // short spiky pixie cut, ends above the chin
+  "ไอดอลสายไฟแรง":{ // short spiky pixie cut, ends above the chin
     hair:seg([[-1,6,8],[0,4,10],[1,3,4],[1,10,11],[2,3,3],[2,11,11]]),
     eyes:"default", outfit:"hoodie"
   },
-  "สายกีฬา":{ // hair pulled back tight, small poof at the crown (ponytail)
+  "ไอดอลสายกีฬา":{ // hair pulled back tight, small poof at the crown (ponytail)
     hair:seg([[-2,6,8],[-1,5,9],[0,4,10],[1,4,4],[1,10,10]]),
     bow:seg([[-3,7,8]]),
     eyes:"default", outfit:"sailor"
   },
-  "สายมั่นใจ":{ // sleek one-length bob, one side tucked shorter (asymmetric)
+  "ไอดอลสายมั่นใจ":{ // sleek one-length bob, one side tucked shorter (asymmetric)
     hair:seg([[0,5,9],[1,4,10],[2,3,11],[3,3,11],[4,3,4],[5,3,4],[6,3,4],[7,3,4],[8,3,4]]),
     eyes:"default", outfit:"wrap"
   }
@@ -871,7 +969,7 @@ function shadeColor(hex,amt){
 }
 
 function buildAvatarSVG(archName,{hair,skin,dress,accent}){
-  const style=ARCHETYPE_STYLE[archName]||ARCHETYPE_STYLE["สายคลาสสิก"];
+  const style=ARCHETYPE_STYLE[archName]||ARCHETYPE_STYLE["ไอดอลสายคลาสสิก"];
   const Wc=15,Hc=22,PAD=3;
   const W=Wc+PAD*2, H=Hc+PAD*2;
   const grid=new Map();
@@ -1063,18 +1161,18 @@ let playerStatsData = {
 
 const archetypes = [
   // [ชื่อสายฟรี, สีผม, สีชุดหลัก, สีเน้น] -- แต่ละแถวไม่ซ้ำกันเลยทั้ง 3 สี
-  ["สายคลาสสิก","#3d2a1f","#5b7fc7","#d94f6b"],
-  ["สายเรียบร้อย","#241f26","#7a5aa8","#f0d27a"],
-  ["สายอบอุ่น","#8a5a3c","#c76b4a","#f5ece0"],
-  ["สายสดใส","#ff8fc4","#ffb84d","#ffffff"],
-  ["สายน่ารัก","#ffb6c8","#8ecae6","#ff6f91"],
-  ["สายคุณหนู","#e8c96a","#b56576","#6d597a"],
-  ["สายร็อก","#9b5de5","#3a3348","#ff206e"],
-  ["สายลึกลับ","#5c5470","#3d3450","#8a7ca8"],
-  ["สายกินจุ","#3a6b6b","#1f4e5f","#7fd8be"],
-  ["สายไฟแรง","#e05c3e","#453a42","#ffcf56"],
-  ["สายกีฬา","#4a7c59","#2f5d8a","#f2f2f2"],
-  ["สายมั่นใจ","#2b2320","#8a1f3d","#d4af37"]
+  ["ไอดอลสายคลาสสิก","#3d2a1f","#5b7fc7","#d94f6b"],
+  ["ไอดอลสายเรียบร้อย","#241f26","#7a5aa8","#f0d27a"],
+  ["ไอดอลสายอบอุ่น","#8a5a3c","#c76b4a","#f5ece0"],
+  ["ไอดอลสายสดใส","#ff8fc4","#ffb84d","#ffffff"],
+  ["ไอดอลสายน่ารัก","#ffb6c8","#8ecae6","#ff6f91"],
+  ["ไอดอลสายคุณหนู","#e8c96a","#b56576","#6d597a"],
+  ["ไอดอลสายร็อก","#9b5de5","#3a3348","#ff206e"],
+  ["ไอดอลสายลึกลับ","#5c5470","#3d3450","#8a7ca8"],
+  ["ไอดอลสายกินจุ","#3a6b6b","#1f4e5f","#7fd8be"],
+  ["ไอดอลสายไฟแรง","#e05c3e","#453a42","#ffcf56"],
+  ["ไอดอลสายกีฬา","#4a7c59","#2f5d8a","#f2f2f2"],
+  ["ไอดอลสายมั่นใจ","#2b2320","#8a1f3d","#d4af37"]
 ];
 
 
@@ -1447,22 +1545,31 @@ function startReveal(){
       <div class="reveal-main">
         <div class="reveal-left">
           <div class="result-pixel">${buildAvatarSVG(r.name,{hair:r.hair,skin:r.skin,dress:r.dress,accent:r.accent})}<span class="spark">${pxicon("star",{main:"var(--gold)",size:9})}</span></div>
-          <div class="reveal-name">${r.name}</div>
-          <span class="kind-tag ${r.rumor.kind}" style="align-self:center">${kindLabel(r.rumor.kind)}</span>
-          <span class="badge">${r.truth==="จริง"?"ข่าวจริง":"ข่าวปลอม"}</span>
         </div>
+
         <div class="reveal-body">
-          <div class="score-head">
-            <span class="base">${r.finalScore} Pt.</span>
-            <span class="delta-inline ${deltaClass}">${deltaText}</span>
+          <div class="reveal-name-top">${r.name}</div>
+
+          <div class="reveal-result-top">
+            <div class="score-head">
+              <span class="base">${r.finalScore} Pt.</span>
+              <span class="delta-inline ${deltaClass}">${deltaText}</span>
+            </div>
           </div>
-          <div class="rumor" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.rumor.text}</div>
-          <div id="picker-icons-${r.index}" class="picker-icons"></div>
-          ${r.sharpEyeBonus>0?`<div class="sharp-eye-bonus" style="animation-delay:${(orderIdx*150)+700}ms">★ โบนัสตาแหลมคม +${r.sharpEyeBonus} Pt.</div>`:""}
-          ${mine && getFanComment(r)
-            ? `<div class="fan-comment">${getFanComment(r)}</div>`
-            : ""
-          }
+
+          <div class="reveal-bottom">
+            <div class="rumor">${r.rumor.text}</div>
+            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+              <span class="kind-tag ${r.rumor.kind}" style="margin:0">${kindLabel(r.rumor.kind)}</span>
+              <span class="badge" style="width:auto">${r.truth==="จริง"?"ข่าวจริง":"ข่าวปลอม"}</span>
+            </div>
+            <div id="picker-icons-${r.index}" class="picker-icons"></div>
+            ${r.sharpEyeBonus>0?`<div class="sharp-eye-bonus" style="animation-delay:${(orderIdx*150)+700}ms">★ โบนัสตาแหลมคม +${r.sharpEyeBonus} Pt.</div>`:""}
+            ${mine && getFanComment(r)
+              ? `<div class="fan-comment">${getFanComment(r)}</div>`
+              : ""
+            }
+          </div>
         </div>
       </div>
     `;
