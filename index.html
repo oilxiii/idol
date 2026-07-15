@@ -498,6 +498,45 @@ input::placeholder{color:#655c85}
   margin-top:6px;
 }
 
+
+/* ----- move ALL action buttons closer to content ----- */
+.home-actions,
+.rules-actions,
+.game-actions,
+.reveal-actions,
+.stand-actions,
+.end-actions,
+.footer-action{
+  margin-top: 8px !important;
+  padding-top: 4px !important;
+}
+
+.home-actions .btn,
+.rules-actions .btn,
+.game-actions .btn,
+.reveal-actions .btn,
+.stand-actions .btn,
+.end-actions .btn,
+.footer-action .btn{
+  margin-top: 0 !important;
+}
+
+/* Reduce extra space at the bottom of screens */
+.screen{
+  padding-bottom: 12px;
+}
+
+
+/* Updated full-body artwork for the 12-idol roster */
+.pixel-art,.result-pixel{overflow:visible}
+.pixel-art{height:112px}
+.pixel-art svg,.result-pixel svg{
+  width:96%;
+  height:96%;
+  object-fit:contain;
+  overflow:visible;
+}
+
 </style>
 </head>
 <body>
@@ -985,115 +1024,129 @@ function shadeColor(hex,amt){
   return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
 }
 
+
+const IDOL_CHARACTER_PROFILES = [{"name": "เฌอปราง", "type": "ไอดอลสายผู้นำ", "hair": "#4a3227", "dress": "#7a55c7", "accent": "#d4942f", "style": "bob", "pose": "handup", "outfit": "princess"}, {"name": "มิวสิค", "type": "ไอดอลสายเสียงเพลง", "hair": "#2d2629", "dress": "#1f9b6f", "accent": "#39d5c3", "style": "twintail", "pose": "cheer", "outfit": "sailor"}, {"name": "โมบายล์", "type": "ไอดอลสายพลังงาน", "hair": "#8b5432", "dress": "#278fc7", "accent": "#58c7ff", "style": "sidepony", "pose": "wave", "outfit": "frill"}, {"name": "ปัญ", "type": "ไอดอลสายไฟแรง", "hair": "#32252b", "dress": "#ef4590", "accent": "#ff75ba", "style": "long", "pose": "power", "outfit": "idol"}, {"name": "เจนนิษฐ์", "type": "ไอดอลสายมั่นใจ", "hair": "#f0c244", "dress": "#ef7b2c", "accent": "#ffcf4b", "style": "highpony", "pose": "point", "outfit": "sport"}, {"name": "เนย", "type": "ไอดอลสายน่ารัก", "hair": "#6a432e", "dress": "#ef6ba7", "accent": "#ffb1d3", "style": "twinbun", "pose": "heart", "outfit": "puff"}, {"name": "น้ำหนึ่ง", "type": "ไอดอลสายอบอุ่น", "hair": "#3e2b2a", "dress": "#5fa96e", "accent": "#c9ea77", "style": "braid", "pose": "open", "outfit": "apron"}, {"name": "แก้ว", "type": "ไอดอลสายสง่างาม", "hair": "#3b2f2d", "dress": "#6b79c8", "accent": "#c7d0ff", "style": "hime", "pose": "grace", "outfit": "classic"}, {"name": "อร", "type": "ไอดอลสายขี้เล่น", "hair": "#805233", "dress": "#dd4c62", "accent": "#ff9d62", "style": "short", "pose": "wink", "outfit": "jacket"}, {"name": "ซัทจัง", "type": "ไอดอลสายเด็กน้อย", "hair": "#4d342d", "dress": "#9f6aaf", "accent": "#e1b5ec", "style": "veil", "pose": "calm", "outfit": "gothic"}, {"name": "ไข่มุก", "type": "ไอดอลสายกินจุ", "hair": "#b27743", "dress": "#e99c3b", "accent": "#ffe06a", "style": "bobcurl", "pose": "snack", "outfit": "cafe"}, {"name": "ปูเป้", "type": "ไอดอลสายสร้างสรรค์", "hair": "#2f2a31", "dress": "#3ea0a0", "accent": "#7fe3e0", "style": "asym", "pose": "star", "outfit": "modern"}];
+const IDOL_PROFILE_BY_NAME = new Map(IDOL_CHARACTER_PROFILES.map(p => [p.name, p]));
+
+function shade(hex,amt){
+  const n=parseInt(hex.slice(1),16);
+  let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.max(0,Math.min(255,r+amt));
+  g=Math.max(0,Math.min(255,g+amt));
+  b=Math.max(0,Math.min(255,b+amt));
+  return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+
+function buildGameAvatar(p){
+ const W=19,H=24,O="#111014",S="#ffd9c4",WHT="#fffaf5",shoe="#201d22";
+ const g=new Map(),k=(r,c)=>r+"_"+c;
+ const put=(r,c,col)=>{if(r>=0&&r<H&&c>=0&&c<W)g.set(k(r,c),col)};
+ const fill=(r,a,b,col)=>{for(let c=a;c<=b;c++)put(r,c,col)};
+ const hair=p.hair,dress=p.dress,acc=p.accent;
+
+ // Hair crown
+ fill(2,6,12,hair);fill(3,4,14,hair);fill(4,3,15,hair);
+ if(p.style==="bob"){fill(5,3,15,hair);fill(6,3,5,hair);fill(6,13,15,hair);fill(7,3,5,hair);fill(7,13,15,hair)}
+ if(p.style==="twintail"){fill(5,4,14,hair);fill(4,0,3,hair);fill(5,0,3,hair);fill(6,1,3,hair);fill(4,15,18,hair);fill(5,15,18,hair);fill(6,15,17,hair)}
+ if(p.style==="sidepony"){fill(5,3,15,hair);fill(4,15,17,hair);fill(5,16,18,hair);fill(6,16,18,hair);fill(7,17,18,hair)}
+ if(p.style==="long"){fill(5,2,16,hair);fill(6,2,5,hair);fill(6,13,16,hair);fill(7,2,5,hair);fill(7,13,16,hair);fill(8,2,4,hair);fill(8,14,16,hair);fill(9,2,4,hair);fill(9,14,16,hair)}
+ if(p.style==="highpony"){fill(1,7,11,hair);fill(0,8,10,hair);fill(3,13,16,hair);fill(4,15,17,hair);fill(5,16,18,hair);fill(5,3,15,hair)}
+ if(p.style==="twinbun"){fill(5,4,14,hair);fill(1,1,4,hair);fill(2,0,4,hair);fill(1,14,17,hair);fill(2,14,18,hair)}
+ if(p.style==="braid"){fill(5,3,15,hair);fill(6,3,5,hair);fill(6,13,15,hair);fill(7,13,17,hair);fill(8,14,18,hair);fill(9,15,18,hair)}
+ if(p.style==="hime"){fill(5,2,16,hair);fill(6,2,5,hair);fill(6,13,16,hair);fill(7,2,5,hair);fill(7,13,16,hair);fill(8,2,5,hair);fill(8,13,16,hair)}
+ if(p.style==="short"){fill(5,3,15,hair);put(1,5,hair);put(1,9,hair);put(1,13,hair);fill(6,3,5,hair);fill(6,13,15,hair)}
+ if(p.style==="veil"){fill(5,2,16,hair);fill(6,2,9,hair);fill(6,13,16,hair);fill(7,2,9,hair);fill(7,13,16,hair);fill(8,2,8,hair);fill(8,14,16,hair)}
+ if(p.style==="bobcurl"){fill(5,3,15,hair);fill(6,2,5,hair);fill(6,13,16,hair);fill(7,1,4,hair);fill(7,14,17,hair);fill(8,2,4,hair);fill(8,14,16,hair)}
+ if(p.style==="asym"){fill(5,3,15,hair);fill(6,3,6,hair);fill(6,13,15,hair);fill(7,3,6,hair)}
+
+ // เส้นขอบพิกเซลสีดำเพิ่มเติมสำหรับทรงผมที่มีส่วนยื่น
+ if(p.name==="โมบายล์"){
+   put(3,15,O); put(3,16,O);
+   put(4,17,O); put(5,18,O); put(6,18,O); put(7,18,O);
+   put(6,15,O); put(7,16,O);
+ }
+ if(p.name==="เจนนิษฐ์"){
+   put(0,7,O); put(0,11,O);
+   put(1,6,O); put(1,12,O);
+   put(2,13,O); put(3,16,O); put(4,18,O); put(5,18,O);
+   put(4,14,O); put(5,15,O);
+ }
+ if(p.name==="เนย"){
+   put(0,1,O); put(0,4,O); put(1,0,O); put(2,0,O); put(2,4,O);
+   put(0,14,O); put(0,17,O); put(1,18,O); put(2,18,O); put(2,14,O);
+   put(3,4,O); put(3,14,O);
+ }
+ if(p.name==="น้ำหนึ่ง"){
+   put(6,16,O); put(7,17,O); put(8,18,O); put(9,18,O);
+   put(10,17,O); put(9,15,O); put(8,14,O);
+ }
+
+ // Face
+ fill(5,6,12,S);fill(6,5,13,S);fill(7,5,13,S);fill(8,5,13,S);fill(9,6,12,S);
+ fill(4,6,12,hair);put(5,7,hair);put(5,11,hair);
+ put(7,7,O);put(7,11,O);put(8,7,O);put(8,11,O);put(8,9,"#d9788d");
+ // accessory
+ fill(3,12,14,acc);put(2,13,acc);
+
+ // Neck
+ fill(10,8,10,S);
+
+ // pose arms
+ if(p.pose==="cheer"){put(11,3,S);put(12,2,S);put(11,15,S);put(12,16,S)}
+ else if(p.pose==="handup"){put(10,3,S);put(9,2,S);put(12,15,S)}
+ else if(p.pose==="wave"){put(10,15,S);put(9,16,S);put(8,16,S);put(12,3,S)}
+ else if(p.pose==="power"){put(12,2,S);put(11,3,S);put(12,16,S);put(11,15,S)}
+ else if(p.pose==="point"){put(11,15,S);put(10,16,S);put(12,3,S)}
+ else if(p.pose==="heart"){put(11,7,S);put(11,11,S);put(10,8,S);put(10,10,S)}
+ else if(p.pose==="open"){put(12,2,S);put(12,16,S)}
+ else if(p.pose==="grace"){put(12,4,S);put(11,14,S)}
+ else if(p.pose==="wink"){put(11,3,S);put(10,2,S);put(12,15,S);put(7,11,S)}
+ else if(p.pose==="calm"){put(12,6,S);put(12,12,S)}
+ else if(p.pose==="snack"){put(11,6,S);put(11,12,S);put(10,12,acc)}
+ else if(p.pose==="star"){put(11,3,S);put(10,2,S);put(11,15,S);put(10,16,S);put(9,1,acc);put(9,17,acc)}
+
+ // outfit body
+ if(p.outfit==="princess"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,6,12,acc);fill(14,5,13,dress);fill(15,4,14,dress);fill(16,3,15,dress);fill(16,5,13,WHT)}
+ else if(p.outfit==="sailor"){fill(11,6,12,dress);fill(12,5,13,dress);fill(12,7,11,WHT);fill(13,8,10,acc);fill(14,5,13,dress);fill(15,4,14,dress);fill(16,3,15,dress)}
+ else if(p.outfit==="frill"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,5,13,WHT);fill(14,5,13,dress);fill(15,4,14,acc);fill(16,3,15,dress)}
+ else if(p.outfit==="idol"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,7,11,acc);fill(14,5,13,dress);fill(15,3,15,dress);fill(16,2,16,dress);fill(16,4,14,WHT)}
+ else if(p.outfit==="sport"){fill(11,5,13,dress);fill(12,5,13,dress);fill(13,6,12,acc);fill(14,6,12,dress);fill(15,6,8,dress);fill(15,10,12,dress)}
+ else if(p.outfit==="puff"){fill(11,6,12,dress);fill(12,4,14,dress);fill(13,6,12,WHT);fill(14,5,13,dress);fill(15,4,14,dress);fill(16,3,15,acc)}
+ else if(p.outfit==="apron"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,7,11,WHT);fill(14,6,12,WHT);fill(15,5,13,dress);fill(16,4,14,dress)}
+ else if(p.outfit==="classic"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,6,12,acc);fill(14,6,12,dress);fill(15,5,13,dress);fill(16,4,14,dress)}
+ else if(p.outfit==="jacket"){fill(11,5,13,dress);fill(12,5,13,dress);fill(13,6,12,WHT);fill(14,6,12,dress);fill(15,5,8,dress);fill(15,10,13,dress)}
+ else if(p.outfit==="gothic"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,7,11,acc);fill(14,5,13,dress);fill(15,4,14,dress);fill(16,3,15,dress);fill(16,5,13,shade(dress,-30))}
+ else if(p.outfit==="cafe"){fill(11,6,12,dress);fill(12,5,13,dress);fill(13,7,11,WHT);fill(14,6,12,WHT);fill(15,5,13,dress);fill(16,4,14,dress);put(13,9,acc)}
+ else {fill(11,5,13,dress);fill(12,5,13,dress);fill(13,6,12,acc);fill(14,5,13,dress);fill(15,4,14,dress);fill(16,3,15,dress)}
+
+ // legs
+ fill(17,6,7,S);fill(17,11,12,S);fill(18,6,7,WHT);fill(18,11,12,WHT);fill(19,5,7,shoe);fill(19,11,13,shoe);
+
+
+ const out=new Set();
+ g.forEach((_,q)=>{const [r,c]=q.split("_").map(Number);for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const nr=r+dr,nc=c+dc,nk=k(nr,nc);if(nr>=0&&nr<H&&nc>=0&&nc<W&&!g.has(nk))out.add(nk)}});
+ let rects="";
+ out.forEach(q=>{const [r,c]=q.split("_").map(Number);rects+=`<rect x="${c}" y="${r}" width="1" height="1" fill="${O}"/>`});
+ g.forEach((col,q)=>{const [r,c]=q.split("_").map(Number);rects+=`<rect x="${c}" y="${r}" width="1" height="1" fill="${col}"/>`});
+ return `<svg viewBox="-1 -1 ${W+2} ${H+2}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">${rects}</svg>`;
+}
+
+function idolDisplayType(name){
+  return IDOL_PROFILE_BY_NAME.get(name)?.type || name;
+}
+
 function buildAvatarSVG(archName,{hair,skin,dress,accent}){
-  const style=ARCHETYPE_STYLE[archName]||ARCHETYPE_STYLE["ไอดอลสายคลาสสิก"];
-  const Wc=15,Hc=22,PAD=3;
-  const W=Wc+PAD*2, H=Hc+PAD*2;
-  const grid=new Map();
-  const key=(r,c)=>r+"_"+c;
-  const px=(row,col,color)=>{ grid.set(key(row+PAD,col+PAD),color); };
-
-  FACE.forEach(([r,c])=>px(r,c,skin));
-
-  // hair: dilate the base silhouette by 2px (4-directional) for extra bigness/volume,
-  // then redraw the real archetype shape on top so it still reads as its own silhouette
-  let dilated=new Set(style.hair.map(([r,c])=>r+"_"+c));
-  for(let i=0;i<2;i++){
-    const grown=new Set(dilated);
-    dilated.forEach(k=>{
-      const [r,c]=k.split("_").map(Number);
-      [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>grown.add((r+dr)+"_"+(c+dc)));
-    });
-    dilated=grown;
-  }
-  dilated.forEach(k=>{ const [r,c]=k.split("_").map(Number); px(r,c,hair); });
-  style.hair.forEach(([r,c])=>px(r,c,hair));
-
-  // hair shine: one contiguous highlight patch on the top-left of the hair for a rounder,
-  // less flat look (a scattered speckle reads as noise rather than volume).
-  const light=shadeColor(hair,55);
-  const hairByRow=new Map();
-  style.hair.forEach(([r,c])=>{ if(!hairByRow.has(r)) hairByRow.set(r,[]); hairByRow.get(r).push(c); });
-  const hairRows=[...hairByRow.keys()].sort((a,b)=>a-b).slice(0,2);
-  hairRows.forEach(r=>{
-    const cols=hairByRow.get(r).slice().sort((a,b)=>a-b).slice(0,2);
-    cols.forEach(c=>px(r,c,light));
-  });
-
-  // hair streaks: a couple of darker strands through the front bangs (like the ref art's
-  // maroon streaks) -- only recolors cells that are already hair, never adds new shape.
-  const streak=shadeColor(hair,-45);
-  [0,1,2].forEach(r=>{
-    [4,9].forEach(c=>{
-      const k=key(r+PAD,c+PAD);
-      if(grid.has(k)) grid.set(k,streak);
-    });
-  });
-
-  // face redrawn on top so it always reads through cleanly, even where hair was dilated
-  FACE.forEach(([r,c])=>px(r,c,skin));
-
-  if(style.eyes==="glasses"){
-    const frame="#5b4363";
-    px(5,4,frame);px(5,5,"#eaf6ff");px(5,6,frame);px(5,7,frame);px(5,8,frame);px(5,9,"#eaf6ff");px(5,10,frame);
-  } else {
-    // eyes: big round dark shape (anime-style). Both eyes catch the light from the same
-    // corner (top-right of each eye) rather than mirrored toward the nose -- a single,
-    // consistent light source reads as "cute" where mirrored dots read as "cross-eyed".
-    const eyeDark="#2a2330", glint="#ffffff", softGlint="#6e5f77", lowerLid="#4a3a45";
-    px(3,5,eyeDark);px(3,6,eyeDark);
-    px(3,8,eyeDark);px(3,9,eyeDark);
-    [4,5].forEach(r=>{
-      [5,6].forEach(c=>px(r,c,eyeDark));
-      [8,9].forEach(c=>px(r,c,eyeDark));
-    });
-    px(4,6,glint); px(4,9,glint); // bright sparkle, same corner (top-right) on both eyes
-    px(5,5,softGlint); px(5,8,softGlint); // dim highlight, same opposite corner (bottom-left) on both
-    px(6,6,lowerLid); px(6,8,lowerLid); // soft lower-lid line rounds the eye out
-  }
-  if(style.hairOverEye) style.hairOverEye.forEach(([r,c])=>px(r,c,hair));
-  px(6,4,"#ffb3cf"); px(6,10,"#ffb3cf"); // blush (on every idol, to match the ref art)
-  // (no mouth, per feedback -- reads cuter without one, matching the ref art)
-
-  if(style.tie) style.tie.forEach(([r,c])=>px(r,c,accent));
-  if(style.bow) style.bow.forEach(([r,c])=>px(r,c,accent));
-  if(style.band) style.band.forEach(([r,c])=>px(r,c,accent));
-  if(style.tiara) style.tiara.forEach(([r,c])=>px(r,c,accent));
-
-  // signature accessory worn by every idol, to match the ref art: small black cat-ear
-  // clips above the crown, plus a clean white ribbon headband across the bangs
-  const EARCOLOR="#2a2330", BAND="#f7f3ee";
-  EAR_L.forEach(([r,c])=>px(r,c,EARCOLOR));
-  EAR_R.forEach(([r,c])=>px(r,c,EARCOLOR));
-  for(let c=3;c<=11;c++) px(2,c,BAND);
-
-  // ---- body: pick this archetype's own outfit silhouette (see OUTFITS) ----
-  const WHITE="#f5f2ee", SHOE="#3a2e35";
-  const colorOf={skin,dress,accent,white:WHITE,shoe:SHOE};
-  (OUTFITS[style.outfit]||OUTFITS.pinafore).forEach(([r,c,k])=>px(r,c,colorOf[k]));
-
-  // auto black outline: any empty cell touching a filled cell
-  const filled=grid;
-  const outline=new Set();
-  filled.forEach((_,k)=>{
-    const [r,c]=k.split("_").map(Number);
-    [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{
-      const nr=r+dr, nc=c+dc, nk=key(nr,nc);
-      if(!filled.has(nk) && nr>=0 && nr<H && nc>=0 && nc<W) outline.add(nk);
-    });
-  });
-
-  let rects="";
-  outline.forEach(k=>{
-    const [r,c]=k.split("_").map(Number);
-    rects+=`<rect x="${c}" y="${r}" width="1" height="1" fill="#2a2330"/>`;
-  });
-  filled.forEach((color,k)=>{
-    const [r,c]=k.split("_").map(Number);
-    rects+=`<rect x="${c}" y="${r}" width="1" height="1" fill="${color}"/>`;
-  });
-
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+  const profile = IDOL_PROFILE_BY_NAME.get(archName) || {
+    name: archName,
+    type: archName,
+    hair,
+    dress,
+    accent,
+    style: "bob",
+    pose: "cheer",
+    outfit: "idol"
+  };
+  return buildGameAvatar(profile);
 }
 
 
@@ -1176,21 +1229,7 @@ let playerStatsData = {
   totalGain:0
 };
 
-const archetypes = [
-  // [ชื่อสายฟรี, สีผม, สีชุดหลัก, สีเน้น] -- แต่ละแถวไม่ซ้ำกันเลยทั้ง 3 สี
-  ["ไอดอลสายคลาสสิก","#3d2a1f","#5b7fc7","#d94f6b"],
-  ["ไอดอลสายเรียบร้อย","#241f26","#7a5aa8","#f0d27a"],
-  ["ไอดอลสายอบอุ่น","#8a5a3c","#c76b4a","#f5ece0"],
-  ["ไอดอลสายสดใส","#ff8fc4","#ffb84d","#ffffff"],
-  ["ไอดอลสายน่ารัก","#ffb6c8","#8ecae6","#ff6f91"],
-  ["ไอดอลสายคุณหนู","#e8c96a","#b56576","#6d597a"],
-  ["ไอดอลสายร็อก","#9b5de5","#3a3348","#ff206e"],
-  ["ไอดอลสายลึกลับ","#5c5470","#3d3450","#8a7ca8"],
-  ["ไอดอลสายกินจุ","#3a6b6b","#1f4e5f","#7fd8be"],
-  ["ไอดอลสายไฟแรง","#e05c3e","#453a42","#ffcf56"],
-  ["ไอดอลสายกีฬา","#4a7c59","#2f5d8a","#f2f2f2"],
-  ["ไอดอลสายมั่นใจ","#2b2320","#8a1f3d","#d4af37"]
-];
+const archetypes = [["เฌอปราง", "#4a3227", "#7a55c7", "#d4942f"], ["มิวสิค", "#2d2629", "#1f9b6f", "#39d5c3"], ["โมบายล์", "#8b5432", "#278fc7", "#58c7ff"], ["ปัญ", "#32252b", "#ef4590", "#ff75ba"], ["เจนนิษฐ์", "#f0c244", "#ef7b2c", "#ffcf4b"], ["เนย", "#6a432e", "#ef6ba7", "#ffb1d3"], ["น้ำหนึ่ง", "#3e2b2a", "#5fa96e", "#c9ea77"], ["แก้ว", "#3b2f2d", "#6b79c8", "#c7d0ff"], ["อร", "#805233", "#dd4c62", "#ff9d62"], ["ซัทจัง", "#4d342d", "#9f6aaf", "#e1b5ec"], ["ไข่มุก", "#b27743", "#e99c3b", "#ffe06a"], ["ปูเป้", "#2f2a31", "#3ea0a0", "#7fe3e0"]];
 
 
 const rumors = [
@@ -1758,9 +1797,9 @@ const AudioFX = {
     this.musicGain = this.ctx.createGain();
     this.sfxGain = this.ctx.createGain();
 
-    this.master.gain.value = 0.9;
-    this.musicGain.gain.value = 0.32;
-    this.sfxGain.gain.value = 0.55;
+    this.master.gain.value = 1;
+    this.musicGain.gain.value = 0.64;
+    this.sfxGain.gain.value = 1;
 
     this.musicGain.connect(this.master);
     this.sfxGain.connect(this.master);
